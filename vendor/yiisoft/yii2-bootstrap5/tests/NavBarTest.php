@@ -48,6 +48,17 @@ EXPECTED;
 
         $this->assertContains('<a class="navbar-brand" href="/"><img src="/images/test.jpg" alt=""></a>', $out);
     }
+    
+    public function testBrandImageOptions()
+    {
+        $out = NavBar::widget([
+            'brandImage' => '/images/test.jpg',
+            'brandImageOptions' => ['alt' => 'test image'],
+            'brandUrl' => '/',
+        ]);
+
+        $this->assertContains('<a class="navbar-brand" href="/"><img src="/images/test.jpg" alt="test image"></a>', $out);
+    }
 
     public function testBrandLink()
     {
@@ -189,6 +200,28 @@ EXPECTED;
 </div></div>
 </nav>
 HTML;
+
+        $this->assertEqualsWithoutLE($expected, $out);
+    }
+
+    public function testNoCollapse()
+    {
+        NavBar::$counter = 0;
+
+        $out = NavBar::widget([
+            'brandLabel' => 'My Company',
+            'brandUrl' => '/',
+            'collapseOptions' => false,
+        ]);
+
+        $expected = <<<EXPECTED
+<nav id="w0" class="navbar navbar-expand-lg navbar-light bg-light">
+<div class="container">
+<a class="navbar-brand" href="/">My Company</a>
+
+</div>
+</nav>
+EXPECTED;
 
         $this->assertEqualsWithoutLE($expected, $out);
     }
