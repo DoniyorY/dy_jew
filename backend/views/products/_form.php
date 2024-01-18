@@ -1,5 +1,6 @@
 <?php
 
+use common\models\GoldType;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -11,27 +12,16 @@ use yii\widgets\ActiveForm;
 <div class="products-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="modal-body">
+        <?= $form->field($model, 'gold_type_id')->dropDownList(\yii\helpers\ArrayHelper::map(GoldType::find()->all(), 'id', 'name'),['prompt'=>'Выберите тип золота']) ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'gold_type_id')->textInput() ?>
-
-    <?= $form->field($model, 'created')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'updated')->textInput() ?>
-
-    <?= $form->field($model, 'is_deleted')->textInput() ?>
-
-    <?= $form->field($model, 'deleted_time')->textInput() ?>
-
-    <?= $form->field($model, 'deleted_user_id')->textInput() ?>
-
-    <?= $form->field($model, 'code')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= $form->field($model, 'code')->textInput() ?>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
     </div>
 
     <?php ActiveForm::end(); ?>

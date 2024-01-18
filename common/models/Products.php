@@ -16,7 +16,7 @@ use Yii;
  * @property int $is_deleted
  * @property int $deleted_time
  * @property int $deleted_user_id
- * @property int $code
+ * @property string $code
  */
 class Products extends \yii\db\ActiveRecord
 {
@@ -35,8 +35,8 @@ class Products extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'gold_type_id', 'created', 'status', 'updated', 'code'], 'required'],
-            [['gold_type_id', 'created', 'status', 'updated', 'is_deleted', 'deleted_time', 'deleted_user_id', 'code'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['gold_type_id', 'created', 'status', 'updated', 'is_deleted', 'deleted_time', 'deleted_user_id'], 'integer'],
+            [['name', 'code'], 'string', 'max' => 255],
         ];
     }
 
@@ -58,4 +58,10 @@ class Products extends \yii\db\ActiveRecord
             'code' => 'Код',
         ];
     }
+
+    public function getType()
+    {
+        return $this->hasOne(GoldType::className(), ['id' => 'gold_type_id']);
+    }
+
 }

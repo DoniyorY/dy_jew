@@ -18,7 +18,7 @@ class GoldTypeSearch extends GoldType
     {
         return [
             [['id'], 'integer'],
-            [['name'], 'safe'],
+            [['name','value'], 'safe'],
         ];
     }
 
@@ -61,7 +61,8 @@ class GoldTypeSearch extends GoldType
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+        ->andFilterWhere(['like','value',$this->value]);
 
         return $dataProvider;
     }

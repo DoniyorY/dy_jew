@@ -10,18 +10,13 @@ use yii\widgets\ActiveForm;
 
 <div class="currency-rate-form">
 
-    <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'created')->textInput() ?>
-
-    <?= $form->field($model, 'updated')->textInput() ?>
-
-    <?= $form->field($model, 'amount')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <?php $form = ActiveForm::begin(['action' => \yii\helpers\Url::to(['currency-rate/create'])]); ?>
+    <div class="modal-body">
+        <?= $form->field($model, 'amount')->textInput() ?>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
     </div>
 
     <?php ActiveForm::end(); ?>

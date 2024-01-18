@@ -11,12 +11,17 @@ use yii\widgets\ActiveForm;
 <div class="gold-type-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="modal-body">
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
     </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </div>
+
 
     <?php ActiveForm::end(); ?>
 

@@ -40,6 +40,7 @@ class CurrencyRateSearch extends CurrencyRate
     public function search($params)
     {
         $query = CurrencyRate::find();
+        $query->orderBy(['id' => 3]);
 
         // add conditions that should always apply here
 

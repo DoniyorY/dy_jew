@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\CurrencyRate;
 use common\models\search\CurrencyRateSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,9 +28,24 @@ class CurrencyRateController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => [
+                                'index',
+                                'create',
+                            ],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ]
             ]
         );
     }
+
+
 
     /**
      * Lists all CurrencyRate models.
@@ -40,6 +56,7 @@ class CurrencyRateController extends Controller
     {
         $searchModel = new CurrencyRateSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -70,16 +87,23 @@ class CurrencyRateController extends Controller
         $model = new CurrencyRate();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $check = CurrencyRate::findOne(['status' => 0]);
+                if ($check) {
+                    $check->status = 1;
+                    $check->updated = time();
+                    $check->update();
+                }
+                $model->status = 0;
+                $model->created = time();
+                $model->updated = 0;
+                $model->save();
             }
         } else {
             $model->loadDefaultValues();
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     /**

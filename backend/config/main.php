@@ -12,6 +12,8 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
+    'name'=>'CRM JEW',
+    'language'=>'ru',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',

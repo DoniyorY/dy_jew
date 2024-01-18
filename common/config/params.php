@@ -6,4 +6,27 @@ return [
     'senderName' => 'Example.com mailer',
     'user.passwordResetTokenExpire' => 3600,
     'user.passwordMinLength' => 6,
+
+
+    'rate_status' => [
+        0 => 'Нынешний курс',
+        1 => 'Старый курс'
+    ],
+    'secure_status' => [
+        'check' => function () {
+            if (Yii::$app->user->isGuest) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    ],
+    'user_status' => [
+        10 => 'Активный',
+        9 => 'Отключённый'
+    ],
+    'user_role' => [
+        0 => 'Администратор',
+        1 => 'Офис'
+    ]
 ];
