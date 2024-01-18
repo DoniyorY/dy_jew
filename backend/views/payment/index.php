@@ -10,16 +10,12 @@ use yii\grid\GridView;
 /** @var common\models\search\PaymentSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Payments';
+$this->title = 'Касса';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payment-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Payment', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -29,14 +25,34 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'created',
-            'amount',
-            'rate_id',
+            //'id',
+            [
+                'attribute' => 'client_id',
+                'value' => function ($data) {
+                    return $data->client->name;
+                }
+            ],
+            [
+                'attribute' => 'created',
+                'value' => function ($data) {
+                    return date('d.m.Y', $data->created);
+                }
+            ],
+            [
+                'attribute' => 'amount',
+                'value' => function ($data) {
+                    return Yii::$app->formatter->asDecimal($data->amount, 0);
+                }
+            ],
+            [
+                'attribute' => 'rate_id',
+                'value' => function ($data) {
+                    return $data->rate->amount;
+                }
+            ],
             'method_id',
             //'payment_type',
-            //'client_id',
-            //'content',
+            'content',
             //'token',
             //'is_deleted',
             //'deleted_user_id',
@@ -45,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Payment $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

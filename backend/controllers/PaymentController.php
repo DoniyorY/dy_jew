@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Payment;
 use common\models\search\PaymentSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +28,20 @@ class PaymentController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => [
+                                //'create',
+                                'index',
+                                'delete',
+                            ],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ]
             ]
         );
     }
@@ -111,8 +126,11 @@ class PaymentController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->is_deleted=1;
+        $model->deleted_time=time();
+        $model->deleted_user_id=\Yii::$app->user->id;
+        $model->update();
         return $this->redirect(['index']);
     }
 

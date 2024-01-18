@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $fullname
  * @property string $phone
+ * @property string $address
  * @property int $balance
  * @property int $created
  * @property int $updated
@@ -36,9 +37,9 @@ class Clients extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fullname', 'phone', 'created', 'updated', 'client_type_id', 'token'], 'required'],
+            [['fullname', 'phone', 'created', 'updated', 'client_type_id', 'token','address'], 'required'],
             [['balance', 'created', 'updated', 'status', 'client_type_id', 'is_deleted', 'deleted_time', 'deleted_user_id'], 'integer'],
-            [['fullname'], 'string', 'max' => 255],
+            [['fullname','address'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 12],
             [['token'], 'string', 'max' => 6],
         ];
@@ -53,6 +54,7 @@ class Clients extends \yii\db\ActiveRecord
             'id' => 'ID',
             'fullname' => 'Ф.И.О',
             'phone' => 'Номер телефона',
+            'address' => 'Адрес',
             'balance' => 'Баланс',
             'created' => 'Дата создания',
             'updated' => 'Дата обновления',

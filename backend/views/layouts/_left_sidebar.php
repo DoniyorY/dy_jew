@@ -20,8 +20,11 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
     <div class="h5 mt-3" style="text-transform: none;"><?php echo Yii::$app->user->identity->fullname; ?></div>
     <table class="table table-dark table-bordered text-left text-white border-white">
         <tr>
-            <td><?php echo "Контакты"; ?></td>
-            <td><?= Yii::$app->user->identity->fullname ?></td>
+            <td><?php echo "Курс"; ?></td>
+            <td><?php
+                $rate = \common\models\CurrencyRate::findOne(['status' => 0]);
+                echo Yii::$app->formatter->asDecimal($rate->amount, 0) . ' UZS';
+                ?></td>
         </tr>
     </table>
     <hr/>
@@ -55,7 +58,29 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             </div>
         </div>
     </div>
-
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingPays">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseClient" aria-expanded="false" aria-controls="flush-collapseOne">
+                <i class="bi bi-people text-success"></i> Клиенты
+            </button>
+        </h2>
+        <div id="flush-collapseClient" class="accordion-collapse collapse" aria-labelledby="flush-headingPays"
+             data-bs-parent="#accordionClients">
+            <div class="accordion-body">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['clients/create']); ?>">
+                            <i class="bi bi-chevron-right"></i> Новый клиент
+                        </a>
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['clients/index']); ?>">
+                            <i class="bi bi-chevron-right"></i> Список клиентов
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingOne">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -65,7 +90,7 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             </button>
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-             data-bs-parent="#accordionFlushExample">
+             data-bs-parent="#accordionClients">
             <div class="accordion-body">
                 <ul class="nav flex-column">
                     <li class="nav-item">

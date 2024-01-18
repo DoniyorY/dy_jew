@@ -41,6 +41,7 @@ class PaymentSearch extends Payment
     public function search($params)
     {
         $query = Payment::find();
+        $query->andFilterWhere(['is_deleted' => 0]);
 
         // add conditions that should always apply here
 

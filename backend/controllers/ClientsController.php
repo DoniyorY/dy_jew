@@ -70,7 +70,12 @@ class ClientsController extends Controller
         $model = new Clients();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+                $model->status = 0;
+                $model->created = time();
+                $model->updated = time();
+                $model->token = \Yii::$app->security->generateRandomString(6);
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -111,8 +116,11 @@ class ClientsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->is_deleted = 1;
+        $model->deleted_time = time();
+        $model->deleted_user_id = \Yii::$app->user->id;
+        $model->update();
         return $this->redirect(['index']);
     }
 
@@ -125,7 +133,7 @@ class ClientsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Clients::findOne(['id' => $id])) !== null) {
+        if (($model = Clients::findOne(['token' => $id])) !== null) {
             return $model;
         }
 
