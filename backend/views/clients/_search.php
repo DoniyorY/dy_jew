@@ -14,34 +14,19 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'fullname') ?>
-
-    <?= $form->field($model, 'phone') ?>
-
-    <?= $form->field($model, 'balance') ?>
-
-    <?= $form->field($model, 'created') ?>
-
-    <?php // echo $form->field($model, 'updated') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'client_type_id') ?>
-
-    <?php // echo $form->field($model, 'token') ?>
-
-    <?php // echo $form->field($model, 'is_deleted') ?>
-
-    <?php // echo $form->field($model, 'deleted_time') ?>
-
-    <?php // echo $form->field($model, 'deleted_user_id') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+    <div class="row">
+        <div class="col-md-4">
+            <?= $form->field($model, 'fullname') ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'phone') ?>
+        </div>
+        <div class="col-md-2 mt-3">
+            <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary w-100']) ?>
+        </div>
+        <div class="col-md-2 mt-3">
+            <?= Html::resetButton('Сбросить', ['class' => 'btn btn-outline-secondary w-100']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

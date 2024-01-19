@@ -43,16 +43,16 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             <div class="accordion-body">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['orders/index']); ?>">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['orders/create']); ?>">
                             <i class="bi bi-chevron-right"></i> Новые Заказы
                         </a>
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['clients/index']); ?>">
-                            <i class="bi bi-chevron-right"></i> Клиенты
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['orders/index']); ?>">
+                            <i class="bi bi-chevron-right"></i> Список заявок
                         </a>
+                        <hr>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['payment/index']); ?>">
                             <i class="bi bi-chevron-right"></i> Касса
                         </a>
-
                     </li>
                 </ul>
             </div>

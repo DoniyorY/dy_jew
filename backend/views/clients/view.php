@@ -18,16 +18,16 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-4 text-center mt-2">
             <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#clientBalanceModal">
-                Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?>
+                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?>
             </button>
         </div>
         <div class="col-md-4 text-end mt-2">
             <div class="btn-group">
                 <a href="<?= \yii\helpers\Url::to(['update', 'id' => $model->token]) ?>" class="btn btn-primary">
-                    Редактировать
+                    <i class="bi bi-pencil"></i> Редактировать
                 </a>
                 <a href="<?=\yii\helpers\Url::to(['delete','id'=>$model->token])?>" class="btn btn-danger" data-method="post" data-confirm="Вы точно хотите удалить этого клиента??">
-                    Удалить
+                    Удалить <i class="bi bi-trash"></i>
                 </a>
             </div>
 
@@ -137,8 +137,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="card-header">
                     <ul class="nav nav-pills card-header-pills justify-content-between">
                         <li class="nav-item">
-                             <a href="#" class="btn btn-primary btn-sm">
-                                 Заказ № 999 от 20.01.2024
+                             <a href="#" target="_blank" class="btn btn-primary btn-sm">
+                                 <i class="bi bi-journal-text"></i> Заказ № 999 от 20.01.2024
                             </a>
                         </li>
                         <li class="nav-item">
@@ -186,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <hr>
         <div class="col-md-12">
-            <h4>История оплаты</h4>
+            <h4>История оплат <i class="bi bi-hourglass-split"></i></h4>
             <table class="table table-sm table-bordered table-striped text-center">
                 <thead>
                 <tr class="table-warning">

@@ -17,11 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'balance',
                 'value' => function ($data) {
-                    return Yii::$app->formatter->asDecimal($data->balance, 0);
+                    return Yii::$app->formatter->asDecimal($data->balance, 0) . ' uzs';
                 }
             ],
             [
@@ -40,18 +40,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     return date('d.m.Y', $data->created);
                 }
             ],
-            [
+            /*[
                 'attribute' => 'updated',
                 'value' => function ($data) {
                     return date('d.m.Y', $data->updated);
                 }
-            ],
+            ],*/
             //'status',
             [
                 'attribute' => 'client_type_id',
                 'value' => function ($data) {
                     return Yii::$app->params['client_type'][$data->client_type_id];
-                }
+                },
+
             ],
             //'token',
             //'is_deleted',
@@ -60,8 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Clients $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                }
+                    return Url::toRoute([$action, 'id' => $model->token]);
+                },
+                'template'=>'{view}'
             ],
         ],
     ]); ?>

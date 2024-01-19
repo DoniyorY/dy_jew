@@ -10,16 +10,12 @@ use yii\grid\GridView;
 /** @var common\models\search\OrdersSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Orders';
+$this->title = 'Заказы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="orders-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Orders', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -29,21 +25,44 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'created',
-            'client_id',
+            //'id',
+            [
+                'attribute' => 'id',
+                'value' => function ($data) {
+                    return '№ ' . $data->id . ' от ' . date('d.m.Y', $data->created);
+                },
+            ],
+            [
+                'attribute' => 'client_id',
+                'value' => function ($data) {
+                    return $data->client->name;
+                }
+            ],
+            [
+                'attribute' => 'user_id',
+                'value' => function ($data) {
+                    return $data->user->fullname;
+                }
+            ],
             'total_amount',
-            'status',
+            'content',
+            [
+                'attribute' => 'status',
+                'value' => function ($data) {
+                    return Yii::$app->params['order_status'][$data->status];
+                }
+            ],
             //'token',
             //'is_deleted',
             //'deleted_user_id',
             //'deleted_time:datetime',
-            //'content',
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Orders $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                    return Url::toRoute([$action, 'id' => $model->token]);
+                },
+                'template' => '{view}'
             ],
         ],
     ]); ?>

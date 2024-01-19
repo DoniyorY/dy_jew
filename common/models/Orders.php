@@ -10,6 +10,8 @@ use Yii;
  * @property int $id
  * @property int $created
  * @property int $client_id
+ * @property int $user_id
+ * @property int $updated
  * @property int $total_amount
  * @property int $status
  * @property string $token
@@ -47,7 +49,7 @@ class Orders extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Заказ № ',
             'created' => 'Дата создания',
             'client_id' => 'Клиент',
             'total_amount' => 'Общая сумма',
@@ -57,11 +59,22 @@ class Orders extends \yii\db\ActiveRecord
             'deleted_user_id' => 'Deleted User ID',
             'deleted_time' => 'Deleted Time',
             'content' => 'Примечание',
+            'user_id'=>'Пользователь'
         ];
     }
 
     public function getClient()
     {
         return $this->hasOne(Clients::className(), ['id' => 'client_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getDeletedUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'deleted_user_id']);
     }
 }

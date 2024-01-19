@@ -70,8 +70,12 @@ class OrdersController extends Controller
         $model = new Orders();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $model->created=time();
+                $model->updated=time();
+                $model->user_id=\Yii::$app->user->id;
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->token]);
             }
         } else {
             $model->loadDefaultValues();
@@ -94,7 +98,7 @@ class OrdersController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->token]);
         }
 
         return $this->render('update', [
@@ -111,8 +115,11 @@ class OrdersController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->is_deleted=1;
+        $model->deleted_time=time();
+        $model->deleted_user_id=\Yii::$app->user->id;
+        $model->update(false);
         return $this->redirect(['index']);
     }
 
@@ -125,7 +132,7 @@ class OrdersController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Orders::findOne(['id' => $id])) !== null) {
+        if (($model = Orders::findOne(['token' => $id])) !== null) {
             return $model;
         }
 
