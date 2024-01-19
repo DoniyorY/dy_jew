@@ -10,16 +10,12 @@ use yii\grid\GridView;
 /** @var common\models\search\ClientsSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Clients';
+$this->title = 'Клиенты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clients-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Clients', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -29,14 +25,34 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'fullname',
             'phone',
-            'balance',
-            'created',
-            //'updated',
+            [
+                'attribute' => 'balance',
+                'value' => function ($data) {
+                    return Yii::$app->formatter->asDecimal($data->balance, 0);
+                }
+            ],
+            [
+                'attribute' => 'created',
+                'value' => function ($data) {
+                    return date('d.m.Y', $data->created);
+                }
+            ],
+            [
+                'attribute' => 'updated',
+                'value' => function ($data) {
+                    return date('d.m.Y', $data->updated);
+                }
+            ],
             //'status',
-            //'client_type_id',
+            [
+                'attribute' => 'client_type_id',
+                'value' => function ($data) {
+                    return Yii::$app->params['client_type'][$data->client_type_id];
+                }
+            ],
             //'token',
             //'is_deleted',
             //'deleted_time:datetime',
@@ -45,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Clients $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

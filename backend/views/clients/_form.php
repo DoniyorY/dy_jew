@@ -11,20 +11,29 @@ use yii\widgets\ActiveForm;
 <div class="clients-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'fullname')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'balance')->textInput() ?>
-
-    <?= $form->field($model, 'address')->textInput() ?>
-
-    <?= $form->field($model, 'client_type_id')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+    <div class="row">
+        <div class="col-md-12">
+            <?= $form->field($model, 'client_type_id')->dropDownList(Yii::$app->params['client_type'], ['prompt' => 'Тип клиента']) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'fullname')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'phone')->textInput(['maxlength' => true, 'type' => 'number']) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'balance')->textInput() ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'address')->textInput() ?>
+        </div>
+        <div class="mt-2">
+            <div class="form-group">
+                <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success w-100']) ?>
+            </div>
+        </div>
     </div>
+
 
     <?php ActiveForm::end(); ?>
 

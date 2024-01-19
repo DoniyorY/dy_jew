@@ -5232,12 +5232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "68d6573ec98715ddcae5a0a85bee3c1c27a4c33f"
+                "reference": "7a42c97bbacc51a366a7308f1f3de34aaeacabe9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/68d6573ec98715ddcae5a0a85bee3c1c27a4c33f",
-                "reference": "68d6573ec98715ddcae5a0a85bee3c1c27a4c33f",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/7a42c97bbacc51a366a7308f1f3de34aaeacabe9",
+                "reference": "7a42c97bbacc51a366a7308f1f3de34aaeacabe9",
                 "shasum": ""
             },
             "require": {
@@ -5257,7 +5257,7 @@
                 "symfony/uid": "^5.4|^6.0|^7.0",
                 "twig/twig": "^2.13|^3.0.4"
             },
-            "time": "2023-12-28T19:16:56+00:00",
+            "time": "2024-01-17T15:10:50+00:00",
             "bin": [
                 "Resources/bin/var-dump-server"
             ],

@@ -3,7 +3,7 @@
         'name' => 'yiisoft/yii2-app-advanced',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'a937b818e79fc37cf3b1f0d9e02b46c0807157d2',
+        'reference' => '50c28f0d67bd8005ecea0e91977142b4804df91d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -796,7 +796,7 @@
         'symfony/var-dumper' => array(
             'pretty_version' => '6.4.x-dev',
             'version' => '6.4.9999999.9999999-dev',
-            'reference' => '68d6573ec98715ddcae5a0a85bee3c1c27a4c33f',
+            'reference' => '7a42c97bbacc51a366a7308f1f3de34aaeacabe9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/var-dumper',
             'aliases' => array(),
@@ -834,7 +834,7 @@
         'yiisoft/yii2-app-advanced' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'a937b818e79fc37cf3b1f0d9e02b46c0807157d2',
+            'reference' => '50c28f0d67bd8005ecea0e91977142b4804df91d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

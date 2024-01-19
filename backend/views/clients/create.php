@@ -9,7 +9,7 @@ $this->title = 'Новый клиент';
 $this->params['breadcrumbs'][] = ['label' => 'Клиенты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="clients-create">
+<div class="clients-create container">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
