@@ -71,9 +71,12 @@ class OrdersController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                $model->created=time();
-                $model->updated=time();
-                $model->user_id=\Yii::$app->user->id;
+                $model->created = time();
+                $model->updated = time();
+                $model->user_id = \Yii::$app->user->id;
+                $model->total_amount = 0;
+                $model->token = \Yii::$app->security->generateRandomString(6);
+                $model->status = 0;
                 $model->save();
                 return $this->redirect(['view', 'id' => $model->token]);
             }
@@ -116,9 +119,9 @@ class OrdersController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->is_deleted=1;
-        $model->deleted_time=time();
-        $model->deleted_user_id=\Yii::$app->user->id;
+        $model->is_deleted = 1;
+        $model->deleted_time = time();
+        $model->deleted_user_id = \Yii::$app->user->id;
         $model->update(false);
         return $this->redirect(['index']);
     }
