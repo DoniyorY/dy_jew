@@ -8,21 +8,23 @@ use Yii;
  * This is the model class for table "order_item".
  *
  * @property int $id
- * @property int $order_id
+ * @property int $sale_id
  * @property int $product_id
  * @property float $price
  * @property int $created
  * @property int $count
+ * @property int $total_price
+ * @property int $status
  * @property float $weight
  */
-class OrderItem extends \yii\db\ActiveRecord
+class SaleItem extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'order_item';
+        return 'sale_item';
     }
 
     /**
@@ -31,8 +33,8 @@ class OrderItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'product_id', 'price', 'created', 'count', 'weight'], 'required'],
-            [['order_id', 'product_id', 'created', 'count'], 'integer'],
+            [['sale_id', 'product_id', 'price', 'created', 'count', 'weight'], 'required'],
+            [['sale_id', 'product_id', 'created', 'count', 'total_price', 'status'], 'integer'],
             [['price', 'weight'], 'number'],
         ];
     }
@@ -44,18 +46,20 @@ class OrderItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_id' => 'Заказ',
+            'sale_id' => 'Заказ',
             'product_id' => 'Товар',
             'price' => 'Цена',
             'created' => 'Дата создания',
             'count' => 'Количество',
             'weight' => 'Вес',
+            'total_price' => 'Итоговая цена',
+            'status' => 'Статус'
         ];
     }
 
     public function getOrder()
     {
-        return $this->hasOne(Orders::className(), ['id' => 'order_id']);
+        return $this->hasOne(Sale::className(), ['id' => 'sale_id']);
     }
 
     public function getProduct()

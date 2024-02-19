@@ -2,16 +2,19 @@
 
 namespace backend\controllers;
 
-use common\models\Orders;
-use common\models\search\OrdersSearch;
+use common\models\Sale;
+use common\models\SaleItem;
+use common\models\search\SaleSearch;
+use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OrdersController implements the CRUD actions for Orders model.
+ * SaleController implements the CRUD actions for Sale model.
  */
-class OrdersController extends Controller
+class SaleController extends Controller
 {
     /**
      * @inheritDoc
@@ -25,21 +28,41 @@ class OrdersController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                        'create-item' => ['post'],
+                        'delete-items' => ['post'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => [
+                                'create',
+                                'index',
+                                'delete',
+                                'create-item',
+                                'delete-item',
+                                'view'
+                            ],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ]
             ]
         );
     }
 
     /**
-     * Lists all Orders models.
+     * Lists all Sale models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new OrdersSearch();
+        $searchModel = new SaleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->orderBy(['id' => SORT_DESC]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -47,27 +70,61 @@ class OrdersController extends Controller
         ]);
     }
 
+    public function actionCreateItem()
+    {
+        $model = new SaleItem();
+        if ($model->load(\Yii::$app->request->post())) {
+            /*echo "<pre>";
+            print_r($_POST);
+            die();*/
+            $model->created = time();
+            $model->status = 0;
+            $model->count = 0;
+            $model->save(false);
+            return $this->redirect(\Yii::$app->request->referrer);
+
+        }
+    }
+
     /**
-     * Displays a single Orders model.
+     * Displays a single Sale model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+
+        $model = $this->findModel($id);
+        if ($model->status == 0) {
+            $model->status = 1;
+            $model->update(false);
+        }
+        $items = SaleItem::findAll(['sale_id' => $model->id]);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'items' => $items
         ]);
     }
 
+    public function actionStatus($id, $status)
+    {
+        $model = $this->findModel($id);
+        $model->status = $status;
+        $model->update(false);
+        return $this->redirect(\Yii::$app->request->referrer);
+
+    }
+
+
     /**
-     * Creates a new Orders model.
+     * Creates a new Sale model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Orders();
+        $model = new Sale();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
@@ -90,7 +147,7 @@ class OrdersController extends Controller
     }
 
     /**
-     * Updates an existing Orders model.
+     * Updates an existing Sale model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -110,7 +167,18 @@ class OrdersController extends Controller
     }
 
     /**
-     * Deletes an existing Orders model.
+     * @throws StaleObjectException
+     * @throws \Throwable
+     */
+    public function actionDeleteItem($id)
+    {
+        $model = SaleItem::findOne(['id' => $id]);
+        $model->delete();
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    /**
+     * Deletes an existing Sale model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -127,15 +195,15 @@ class OrdersController extends Controller
     }
 
     /**
-     * Finds the Orders model based on its primary key value.
+     * Finds the Sale model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Orders the loaded model
+     * @return Sale the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Orders::findOne(['token' => $id])) !== null) {
+        if (($model = Sale::findOne(['token' => $id])) !== null) {
             return $model;
         }
 

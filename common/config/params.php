@@ -37,10 +37,16 @@ return [
         0 => 'Активный',
         1 => 'Неактивный'
     ],
-    'order_status' => [
+    'sale_status' => [
         0 => 'Новый',
         1 => 'В оформлении',
         2 => 'Активный',
         3 => 'Завершенный'
-    ]
+    ],
+    'sale_status_badge' => [
+        0 => 'badge bg-warning w-100',
+        1 => 'badge bg-secondary w-100',
+        2 => 'badge bg-primary w-100',
+        3 => 'badge bg-success w-100'
+    ],
 ];

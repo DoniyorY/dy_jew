@@ -64,4 +64,8 @@ class Products extends \yii\db\ActiveRecord
         return $this->hasOne(GoldType::className(), ['id' => 'gold_type_id']);
     }
 
+    public function getInfo()
+    {
+        return $this->name . ' ( ' . $this->type->name . ' )';
+    }
 }

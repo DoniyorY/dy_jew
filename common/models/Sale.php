@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "orders".
+ * This is the model class for table "sale".
  *
  * @property int $id
  * @property int $created
@@ -20,14 +20,14 @@ use Yii;
  * @property int $deleted_time
  * @property string $content
  */
-class Orders extends \yii\db\ActiveRecord
+class Sale extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'orders';
+        return 'sale';
     }
 
     /**

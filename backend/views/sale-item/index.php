@@ -1,13 +1,13 @@
 <?php
 
-use common\models\OrderItem;
+use common\models\SaleItem;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var common\models\search\OrderItemSearch $searchModel */
+/** @var common\models\search\SaleItemSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Order Items';
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'weight',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, OrderItem $model, $key, $index, $column) {
+                'urlCreator' => function ($action, SaleItem $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

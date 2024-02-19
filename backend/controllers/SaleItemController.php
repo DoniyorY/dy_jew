@@ -2,16 +2,16 @@
 
 namespace backend\controllers;
 
-use common\models\OrderItem;
-use common\models\search\OrderItemSearch;
+use common\models\SaleItem;
+use common\models\search\SaleItemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OrderItemController implements the CRUD actions for OrderItem model.
+ * SaleItemController implements the CRUD actions for SaleItem model.
  */
-class OrderItemController extends Controller
+class SaleItemController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,13 +32,13 @@ class OrderItemController extends Controller
     }
 
     /**
-     * Lists all OrderItem models.
+     * Lists all SaleItem models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new OrderItemSearch();
+        $searchModel = new SaleItemSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -48,7 +48,7 @@ class OrderItemController extends Controller
     }
 
     /**
-     * Displays a single OrderItem model.
+     * Displays a single SaleItem model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -61,13 +61,13 @@ class OrderItemController extends Controller
     }
 
     /**
-     * Creates a new OrderItem model.
+     * Creates a new SaleItem model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new OrderItem();
+        $model = new SaleItem();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -83,7 +83,7 @@ class OrderItemController extends Controller
     }
 
     /**
-     * Updates an existing OrderItem model.
+     * Updates an existing SaleItem model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -103,7 +103,7 @@ class OrderItemController extends Controller
     }
 
     /**
-     * Deletes an existing OrderItem model.
+     * Deletes an existing SaleItem model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -117,15 +117,15 @@ class OrderItemController extends Controller
     }
 
     /**
-     * Finds the OrderItem model based on its primary key value.
+     * Finds the SaleItem model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return OrderItem the loaded model
+     * @return SaleItem the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = OrderItem::findOne(['id' => $id])) !== null) {
+        if (($model = SaleItem::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

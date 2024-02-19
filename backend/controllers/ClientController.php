@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\ClientPhone;
 use common\models\Clients;
+use common\models\Sale;
 use common\models\search\ClientsSearch;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -11,9 +12,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ClientsController implements the CRUD actions for Clients model.
+ * ClientController implements the CRUD actions for Clients model.
  */
-class ClientsController extends Controller
+class ClientController extends Controller
 {
     /**
      * @inheritDoc
@@ -41,7 +42,8 @@ class ClientsController extends Controller
                                 'delete',
                                 'create-phone',
                                 'view',
-                                'delete-phone'
+                                'delete-phone',
+                                'update',
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -78,9 +80,12 @@ class ClientsController extends Controller
     {
         $model = $this->findModel($id);
         $phone = ClientPhone::findAll(['client_id' => $model->id]);
+        $sales = Sale::find()->where(['client_id' => $model->id])->orderBy(['id' => SORT_DESC])->limit(3)->all();
+
         return $this->render('view', [
             'model' => $model,
             'phone' => $phone,
+            'sales' => $sales,
         ]);
     }
 

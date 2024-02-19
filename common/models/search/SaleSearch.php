@@ -4,12 +4,12 @@ namespace common\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Orders;
+use common\models\Sale;
 
 /**
- * OrdersSearch represents the model behind the search form of `common\models\Orders`.
+ * SaleSearch represents the model behind the search form of `common\models\Sale`.
  */
-class OrdersSearch extends Orders
+class SaleSearch extends Sale
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class OrdersSearch extends Orders
      */
     public function search($params)
     {
-        $query = Orders::find();
+        $query = Sale::find();
 
         // add conditions that should always apply here
 

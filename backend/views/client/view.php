@@ -1,6 +1,8 @@
 <?php
 
+use common\models\SaleItem;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
@@ -17,8 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
         <div class="col-md-4 text-center mt-2">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#clientBalanceModal">
-                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?>
+            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
+                    data-bs-target="#clientBalanceModal">
+                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?> UZS
             </button>
         </div>
         <div class="col-md-4 text-end mt-2">
@@ -26,7 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <a href="<?= \yii\helpers\Url::to(['update', 'id' => $model->token]) ?>" class="btn btn-primary">
                     <i class="bi bi-pencil"></i> Редактировать
                 </a>
-                <a href="<?=\yii\helpers\Url::to(['delete','id'=>$model->token])?>" class="btn btn-danger" data-method="post" data-confirm="Вы точно хотите удалить этого клиента??">
+                <a href="<?= \yii\helpers\Url::to(['delete', 'id' => $model->token]) ?>" class="btn btn-danger"
+                   data-method="post" data-confirm="Вы точно хотите удалить этого клиента??">
                     Удалить <i class="bi bi-trash"></i>
                 </a>
             </div>
@@ -133,56 +137,65 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-7 pt-3 pl-5">
             <h4>История заказов</h4>
-            <div class="card text-center">
-                <div class="card-header">
-                    <ul class="nav nav-pills card-header-pills justify-content-between">
-                        <li class="nav-item">
-                             <a href="#" target="_blank" class="btn btn-primary btn-sm">
-                                 <i class="bi bi-journal-text"></i> Заказ № 999 от 20.01.2024
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <div class="badge bg-success">
-                                Активный
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <table class="table-bordered table-sm table-striped table">
-                        <thead>
-                        <tr class="table-primary">
-                            <th>#</th>
-                            <th>Наименование товара</th>
-                            <th>Сумма за грамм</th>
-                            <th>Кол-во товаров</th>
-                            <th>Вес</th>
-                            <th>Итого</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Куйма</td>
-                            <td>300 000 uzs</td>
-                            <td> 5 </td>
-                            <td>27.3гр</td>
-                            <td>20 000 000 uzs</td>
-                        </tr>
-                        <tr class="table-dark">
-                            <th></th>
-                            <th></th>
-                            <th>Итого</th>
-                            <th>5</th>
-                            <th>27.3 гр</th>
-                            <th>20 000 000 uzs</th>
-                        </tr>
-                        </tbody>
+            <?php foreach ($sales as $item): ?>
+                <div class="card text-center">
+                    <div class="card-header">
+                        <ul class="nav nav-pills card-header-pills justify-content-between">
+                            <li class="nav-item">
+                                <a href="<?= Url::to(['sale/view', 'id' => $item->token]) ?>" target="_blank"
+                                   class="btn btn-primary btn-sm">
+                                    <i class="bi bi-journal-text"></i> Заказ № <?= $item->id ?>
+                                    от <?= date('d.m.Y', $item->created) ?>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="<?= Yii::$app->params['sale_status_badge'][$item->status] ?>">
+                                    <?= Yii::$app->params['sale_status'][$item->status] ?>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <table class="table-bordered table-sm table-striped table">
+                            <thead>
+                            <tr class="table-primary">
+                                <th>#</th>
+                                <th>Наименование товара</th>
+                                <th>Сумма за грамм</th>
+                                <th>Вес</th>
+                                <th>Итого</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $i = 1;
+                            $sale_items = SaleItem::findAll(['sale_id' => $item->id]);
+                            $weight = 0;
+                            $total = 0;
+                            foreach ($sale_items as $val):?>
+                                <tr>
+                                    <td><?= $i ?></td>
+                                    <td><?= $val->product->name ?></td>
+                                    <td><?= Yii::$app->formatter->asDecimal($val->price, 0) ?> UZS</td>
+                                    <td><?= $val->weight ?> гр</td>
+                                    <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
+                                </tr>
+                                <?php $i++;
+                                $weight += $val->weight;
+                                $total += $val->total_price; endforeach; ?>
+                            <tr class="table-dark">
+                                <th></th>
+                                <th>Итого</th>
+                                <th></th>
+                                <th><?= $weight ?> гр</th>
+                                <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                            </tr>
+                            </tbody>
 
-                    </table>
+                        </table>
+                    </div>
+                    <div class="card-footer"></div>
                 </div>
-                <div class="card-footer"></div>
-            </div>
+            <?php endforeach; ?>
         </div>
         <hr>
         <div class="col-md-12">
@@ -206,7 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>300 000 uzs</td>
                     <td>Приход</td>
                     <td>12 430 uzs</td>
-                    <td>Не помню</td>
+                    <td>USD / UZS</td>
                     <td>
                         <a href="#" class="btn btn-sm btn-primary">
                             <i class="bi bi-eye"></i>
@@ -219,7 +232,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>300 000 uzs</td>
                     <td>Приход</td>
                     <td>12 430 uzs</td>
-                    <td>Не помню</td>
+                    <td>USD / UZS</td>
                     <td>
                         <a href="#" class="btn btn-sm btn-primary">
                             <i class="bi bi-eye"></i>
@@ -232,7 +245,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>300 000 uzs</td>
                     <td>Приход</td>
                     <td>12 430 uzs</td>
-                    <td>Не помню</td>
+                    <td>USD / UZS</td>
                     <td>
                         <a href="#" class="btn btn-sm btn-primary">
                             <i class="bi bi-eye"></i>
@@ -245,13 +258,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>300 000 uzs</td>
                     <td>Приход</td>
                     <td>12 430 uzs</td>
-                    <td>Не помню</td>
+                    <td>USD / UZS</td>
                     <td>
                         <a href="#" class="btn btn-sm btn-primary">
                             <i class="bi bi-eye"></i>
                         </a>
                     </td>
                 </tr>
+
                 <tr class="table-dark">
                     <th></th>
                     <th>Итого</th>
@@ -267,7 +281,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="clientBalanceModal" tabindex="-1" aria-labelledby="clientBalanceModalLabel" aria-hidden="true">
+    <div class="modal fade" id="clientBalanceModal" tabindex="-1" aria-labelledby="clientBalanceModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

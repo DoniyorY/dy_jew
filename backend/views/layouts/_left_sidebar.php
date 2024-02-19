@@ -43,10 +43,10 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             <div class="accordion-body">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['orders/create']); ?>">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/create']); ?>">
                             <i class="bi bi-chevron-right"></i> Новые Заказы
                         </a>
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['orders/index']); ?>">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/index']); ?>">
                             <i class="bi bi-chevron-right"></i> Список заявок
                         </a>
                         <hr>
@@ -70,10 +70,10 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             <div class="accordion-body">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['clients/create']); ?>">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['client/create']); ?>">
                             <i class="bi bi-chevron-right"></i> Новый клиент
                         </a>
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['clients/index']); ?>">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['client/index']); ?>">
                             <i class="bi bi-chevron-right"></i> Список клиентов
                         </a>
                     </li>

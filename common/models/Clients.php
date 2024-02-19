@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "clients".
+ * This is the model class for table "client".
  *
  * @property int $id
  * @property string $fullname
@@ -28,7 +28,7 @@ class Clients extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'clients';
+        return 'client';
     }
 
     /**
