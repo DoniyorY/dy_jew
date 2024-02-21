@@ -17,7 +17,7 @@ class PaymentSearch extends Payment
     public function rules()
     {
         return [
-            [['id', 'created', 'amount', 'rate_id', 'method_id', 'payment_type', 'client_id', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
+            [['id', 'created', 'amount', 'rate_amount','rate_date', 'method_id', 'payment_type', 'client_id', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
             [['token'], 'safe'],
         ];
     }
@@ -62,7 +62,8 @@ class PaymentSearch extends Payment
             'id' => $this->id,
             'created' => $this->created,
             'amount' => $this->amount,
-            'rate_id' => $this->rate_id,
+            'rate_amount' => $this->rate_amount,
+            'rate_date' => $this->rate_date,
             'method_id' => $this->method_id,
             'payment_type' => $this->payment_type,
             'client_id' => $this->client_id,

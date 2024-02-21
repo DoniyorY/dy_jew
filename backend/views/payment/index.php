@@ -45,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => 'rate_id',
+                'attribute' => 'rate_amount',
                 'value' => function ($data) {
-                    return $data->rate->amount;
+                    return Yii::$app->formatter->asDecimal($data->rate_amount,0) . ' ( '. date('d.m.Y',$data->rate_date) . ' ) ';
                 }
             ],
             'method_id',

@@ -49,4 +49,12 @@ return [
         2 => 'badge bg-primary w-100',
         3 => 'badge bg-success w-100'
     ],
+    'amount_type' => [
+        0 => 'UZS',
+        1 => 'USD',
+    ],
+    'payment_method'=>[
+        0=>'Наличные',
+        1=>'Карта'
+    ]
 ];

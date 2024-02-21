@@ -10,7 +10,8 @@ use Yii;
  * @property int $id
  * @property int $created
  * @property int $amount
- * @property int $rate_id
+ * @property int $rate_amount
+ * @property int $rate_date
  * @property int $method_id
  * @property int $payment_type
  * @property int $client_id
@@ -37,7 +38,7 @@ class Payment extends \yii\db\ActiveRecord
     {
         return [
             [['created', 'amount', 'rate_id', 'method_id', 'payment_type', 'client_id', 'content', 'token'], 'required'],
-            [['created', 'amount', 'rate_id', 'method_id', 'payment_type', 'client_id', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
+            [['created', 'amount', 'rate_id', 'method_id', 'payment_type', 'client_id', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time','rate_amount','rate_date'], 'integer'],
             [['token'], 'string', 'max' => 6],
         ];
     }
@@ -51,7 +52,8 @@ class Payment extends \yii\db\ActiveRecord
             'id' => 'ID',
             'created' => 'Дата создания',
             'amount' => 'Сумма',
-            'rate_id' => 'Курс',
+            'rate_amount' => 'Курс',
+            'rate_date' => 'Дата',
             'method_id' => 'Метод',
             'payment_type' => 'Тип оплаты',
             'client_id' => 'Клиент',
