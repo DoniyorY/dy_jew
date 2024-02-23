@@ -29,7 +29,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup','index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -101,7 +101,7 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionToken()
+    /*public function actionToken()
     {
         $url = 'https://partner.atmos.uz/token';
         $data = ['grant_type' => 'client_credentials'];
@@ -130,7 +130,7 @@ class SiteController extends Controller
         echo "<pre>";
         print_r($response->data);
 
-    }
+    }*/
 
     /**
      * Logs out the current user.
