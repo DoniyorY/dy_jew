@@ -64,6 +64,7 @@ class Payment extends \yii\db\ActiveRecord
             'is_deleted' => 'Is Deleted',
             'deleted_user_id' => 'Deleted User ID',
             'deleted_time' => 'Deleted Time',
+            'amount_type'=>'Валюта'
         ];
     }
 
@@ -75,5 +76,20 @@ class Payment extends \yii\db\ActiveRecord
     public function getRate()
     {
         return $this->hasOne(CurrencyRate::className(), ['id' => 'rate_id']);
+    }
+
+    /**
+     * @param $dataProvider
+     * @param $fieldName
+     * @return string|null
+     */
+    public static function getTotalCount($dataProvider, $fieldName){
+        $totalBalance = 0;
+
+        foreach ($dataProvider as $item){
+            $totalBalance += $item[$fieldName];
+        }
+
+        return yii::$app->formatter->asDecimal($totalBalance,0);
     }
 }

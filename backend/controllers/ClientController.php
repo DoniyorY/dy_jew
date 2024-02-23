@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\ClientPhone;
 use common\models\Clients;
+use common\models\CurrencyRate;
 use common\models\Payment;
 use common\models\Sale;
 use common\models\search\ClientsSearch;
@@ -85,11 +86,21 @@ class ClientController extends Controller
             $model->deleted_user_id = 0;
             $model->deleted_time = 0;
             $model->method_id = 0;
-
+            $model->amount_type = $post['amount_type'];
             if ($post['amount_type'] == 1) {
-                $model->content=$model->content . "( Приём оплаты в USD " . $post['amount'] . ' )';
+                $model->content = $model->content . "( Приём оплаты в USD " . $post['amount'] . ' )';
                 $total = $post['amount'] * $post['rate_amount'];
                 $model->amount = $total;
+                $curr = CurrencyRate::findOne(['status' => 0]);
+                $curr->status = 1;
+                $curr->updated = time();
+                $curr->update(false);
+                $new_curr = new CurrencyRate();
+                $new_curr->created = time();
+                $new_curr->amount = $post['rate_amount'];
+                $new_curr->updated = 0;
+                $new_curr->status = 0;
+                $new_curr->save();
             }
             if ($model->save(false)) {
                 $client = Clients::findOne(['id' => $model->client_id]);
@@ -111,8 +122,8 @@ class ClientController extends Controller
     {
         $model = $this->findModel($id);
         $phone = ClientPhone::findAll(['client_id' => $model->id]);
-        $sales = Sale::find()->where(['client_id' => $model->id])->orderBy(['id' => SORT_DESC])->limit(3)->all();
-        $payment = Payment::findAll(['client_id' => $model->id]);
+        $sales = Sale::find()->where(['client_id' => $model->id])->orderBy(['id' => SORT_DESC])->limit(2)->all();
+        $payment = Payment::find()->where(['client_id' => $model->id])->orderBy(['id'=>SORT_DESC])->limit(10)->all();
         return $this->render('view', [
             'model' => $model,
             'phone' => $phone,

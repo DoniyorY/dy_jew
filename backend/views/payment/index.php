@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
 /** @var common\models\search\PaymentSearch $searchModel */
@@ -17,10 +18,18 @@ $total_today = $today_card + $today_cash;
 ?>
 <div class="payment-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <div class="row">
+        <div class="col-md-10">
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+        <div class="col-md-2">
+            <button class="w-100 btn btn-warning" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Расход <i class="bi bi-arrow-up-square"></i>
+            </button>
+        </div>
         <div class="col-md-12">
-            <table class="table table-sm table-bordered text-center">
+            <table class="table table-s table-bordered text-center">
                 <tr>
                     <th class="table-primary">Общая</th>
                     <th class="table-secondary"><i class="bi bi-cash"></i> Наличные:</th>
@@ -40,12 +49,25 @@ $total_today = $today_card + $today_cash;
                 </tr>
             </table>
         </div>
+        <div class="col-md-12">
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <?= $this->render('_form_outcome', ['model' => new Payment()]) ?>
+                </div>
+            </div>
+        </div>
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?php
+    Pjax::begin();
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'showFooter'=>true,
+        'rowOptions'=>[
+                'class'=>'text-center'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -53,8 +75,13 @@ $total_today = $today_card + $today_cash;
             [
                 'attribute' => 'client_id',
                 'value' => function ($data) {
-                    return $data->client->fullname;
-                }
+                    if ($data->client_id == 0) {
+                        return 'Не задано!!!';
+                    } else {
+                        return Html::a($data->client->fullname, ['client/view', 'id' => $data->client->token], ['class' => 'btn btn-sm btn-primary w-100']);
+                    }
+                },
+                'format' => 'raw',
             ],
             [
                 'attribute' => 'payment_type',
@@ -73,8 +100,16 @@ $total_today = $today_card + $today_cash;
             [
                 'attribute' => 'amount',
                 'value' => function ($data) {
-                    return Yii::$app->formatter->asDecimal($data->amount, 0) . ' UZS';
-                }
+                    return Yii::$app->formatter->asDecimal($data->amount, 0);
+                },
+                'footer'=>Payment::getTotalCount($dataProvider->models, 'amount')
+            ],
+            [
+                'attribute' => 'amount_type',
+                'value' => function ($data) {
+                    return Yii::$app->params['amount_type'][$data->amount_type];
+                },
+                'filter' => Yii::$app->params['amount_type']
             ],
             [
                 'attribute' => 'rate_amount',
@@ -90,14 +125,15 @@ $total_today = $today_card + $today_cash;
                 'format' => 'raw',
                 'filter' => Yii::$app->params['payment_method']
             ],
-            //'payment_type',
             'content',
             //'token',
             //'is_deleted',
             //'deleted_user_id',
             //'deleted_time:datetime',
         ],
-    ]); ?>
+    ]);
+    Pjax::end();
+    ?>
 
 
 </div>

@@ -17,7 +17,7 @@ class PaymentSearch extends Payment
     public function rules()
     {
         return [
-            [['id', 'created', 'amount', 'rate_amount','rate_date', 'method_id', 'payment_type', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
+            [['id', 'created', 'amount', 'rate_amount','rate_date', 'method_id', 'payment_type', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time','amount_type'], 'integer'],
             [['token','client_id'], 'safe'],
         ];
     }
@@ -61,6 +61,7 @@ class PaymentSearch extends Payment
         $query->andFilterWhere([
             'id' => $this->id,
             'created' => $this->created,
+            'amount_type' => $this->amount_type,
             'amount' => $this->amount,
             'rate_amount' => $this->rate_amount,
             'rate_date' => $this->rate_date,

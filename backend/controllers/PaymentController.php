@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\CurrencyRate;
 use common\models\Payment;
 use common\models\search\PaymentSearch;
 use yii\filters\AccessControl;
@@ -26,6 +27,7 @@ class PaymentController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                        'outcome' => ['POST'],
                     ],
                 ],
                 'access' => [
@@ -33,7 +35,7 @@ class PaymentController extends Controller
                     'rules' => [
                         [
                             'actions' => [
-                                //'create',
+                                'outcome',
                                 'index',
                                 'delete',
                             ],
@@ -55,17 +57,18 @@ class PaymentController extends Controller
     {
         $searchModel = new PaymentSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->orderBy(['id' => SORT_DESC]);
         $day_start = mktime('0', '0', '0');
         $day_end = $day_start + 86399;
         $today_cash = Payment::find()->where(['between', 'created', $day_start, $day_end])
-            ->andWhere(['is_deleted' => 0, 'payment_type' => 0])
+            ->andWhere(['is_deleted' => 0, 'method_id' => 0])
             ->sum('amount');
         $today_card = Payment::find()->where(['between', 'created', $day_start, $day_end])
-            ->andWhere(['is_deleted' => 0, 'payment_type' => 1])
+            ->andWhere(['is_deleted' => 0, 'method_id' => 1])
             ->sum('amount');
-        $card = Payment::find()->where(['is_deleted' => 0, 'payment_type' => 1])
+        $card = Payment::find()->where(['is_deleted' => 0, 'method_id' => 1])
             ->sum('amount');
-        $cash = Payment::find()->where(['is_deleted' => 0, 'payment_type' => 0])
+        $cash = Payment::find()->where(['is_deleted' => 0, 'method_id' => 0])
             ->sum('amount');
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -90,46 +93,43 @@ class PaymentController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Payment model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
+    public function actionOutcome()
     {
         $model = new Payment();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if (\Yii::$app->request->post()) {
+            $post = $_POST['Payment'];
+            $model->created = time();
+            $model->amount = $post['amount'] * -1;
+            $model->rate_amount = $post['rate_amount'];
+            $model->rate_date = time();
+            $model->method_id = 0;
+            $model->content = $post['content'];
+            $model->payment_type = 1;
+            $model->amount_type = $post['amount_type'];
+            if ($post['amount_type'] == 1) {
+                $model->amount = ($post['amount'] * $post['rate_amount'] * -1);
+                $model->content = $model->content . "( Приём оплаты в USD " . $post['amount'] . ' )';
+                $model->update();
+                $curr = CurrencyRate::findOne(['status' => 0]);
+                $curr->status = 1;
+                $curr->updated = time();
+                $curr->update(false);
+                $new_curr = new CurrencyRate();
+                $new_curr->created = time();
+                $new_curr->amount = $post['rate_amount'];
+                $new_curr->updated = 0;
+                $new_curr->status = 0;
+                $new_curr->save();
             }
-        } else {
-            $model->loadDefaultValues();
+            $model->client_id = 0;
+            $model->token = \Yii::$app->security->generateRandomString(6);
+            $model->is_deleted = 0;
+            $model->deleted_time = 0;
+            $model->deleted_user_id = 0;
+            if ($model->save()) {
+                return $this->redirect(\Yii::$app->request->referrer);
+            }
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Payment model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

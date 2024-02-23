@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
 /** @var common\models\search\SaleSearch $searchModel */
@@ -19,7 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?php
+    Pjax::begin();
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -42,9 +45,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'user_id',
                 'value' => function ($data) {
                     return $data->user->fullname;
+                },
+                'filter'=>\yii\helpers\ArrayHelper::map(\common\models\User::findAll(['status'=>10]),'id','username')
+            ],
+            [
+                'attribute' => 'total_amount',
+                'value' => function ($data) {
+                    return Yii::$app->formatter->asDecimal($data->total_amount,0);
                 }
             ],
-            'total_amount',
             'content',
             [
                 'attribute' => 'status',
@@ -66,7 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}'
             ],
         ],
-    ]); ?>
+    ]);
+    Pjax::end();
+    ?>
 
 
 </div>

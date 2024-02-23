@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-7 pt-3 pl-5">
             <h4>История заказов</h4>
             <?php foreach ($sales as $item): ?>
-                <div class="card text-center">
+                <div class="card text-center mt-1">
                     <div class="card-header">
                         <ul class="nav nav-pills card-header-pills justify-content-between">
                             <li class="nav-item">
@@ -155,7 +155,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </li>
                         </ul>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body pb-1">
                         <table class="table-bordered table-sm table-striped table">
                             <thead>
                             <tr class="table-primary">
@@ -174,7 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             foreach ($sale_items as $val):?>
                                 <tr>
                                     <td><?= $i ?></td>
-                                    <td><?= $val->product->name ?></td>
+                                    <td><?= $val->product->name . ' ( ' . $val->product->type->name . ' ) ' ?></td>
                                     <td><?= Yii::$app->formatter->asDecimal($val->price, 0) ?> UZS</td>
                                     <td><?= $val->weight ?> гр</td>
                                     <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
@@ -193,7 +193,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         </table>
                     </div>
-                    <div class="card-footer"></div>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -221,7 +220,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
                         <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
                         <td><?= Yii::$app->params['payment_method'][$item->method_id] ?></td>
-                        <td><?=$item->content?></td>
+                        <td><?= $item->content ?></td>
                     </tr>
                     <?php $i++;
                     $total += $item->amount; endforeach; ?>
