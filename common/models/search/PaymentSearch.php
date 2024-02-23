@@ -17,8 +17,8 @@ class PaymentSearch extends Payment
     public function rules()
     {
         return [
-            [['id', 'created', 'amount', 'rate_amount','rate_date', 'method_id', 'payment_type', 'client_id', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
-            [['token'], 'safe'],
+            [['id', 'created', 'amount', 'rate_amount','rate_date', 'method_id', 'payment_type', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
+            [['token','client_id'], 'safe'],
         ];
     }
 
@@ -40,8 +40,8 @@ class PaymentSearch extends Payment
      */
     public function search($params)
     {
-        $query = Payment::find();
-        $query->andFilterWhere(['is_deleted' => 0]);
+        $query = Payment::find()->joinWith('client');
+        $query->andFilterWhere(['payment.is_deleted' => 0]);
 
         // add conditions that should always apply here
 
@@ -66,14 +66,14 @@ class PaymentSearch extends Payment
             'rate_date' => $this->rate_date,
             'method_id' => $this->method_id,
             'payment_type' => $this->payment_type,
-            'client_id' => $this->client_id,
             'content' => $this->content,
-            'is_deleted' => $this->is_deleted,
-            'deleted_user_id' => $this->deleted_user_id,
-            'deleted_time' => $this->deleted_time,
+            'payment.is_deleted' => $this->is_deleted,
+            'payment.deleted_user_id' => $this->deleted_user_id,
+            'payment.deleted_time' => $this->deleted_time,
         ]);
 
-        $query->andFilterWhere(['like', 'token', $this->token]);
+        $query->andFilterWhere(['like', 'token', $this->token])
+        ->andFilterWhere(['like','client.fullname',$this->client_id]);
 
         return $dataProvider;
     }

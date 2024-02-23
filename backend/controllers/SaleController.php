@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Clients;
 use common\models\Sale;
 use common\models\SaleItem;
 use common\models\search\SaleSearch;
@@ -42,7 +43,8 @@ class SaleController extends Controller
                                 'delete',
                                 'create-item',
                                 'delete-item',
-                                'view'
+                                'view',
+                                'status'
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -111,6 +113,22 @@ class SaleController extends Controller
     {
         $model = $this->findModel($id);
         $model->status = $status;
+        $model->updated = time();
+
+        //If Status Complete
+        if ($status == 2) {
+            $items = SaleItem::findAll(['sale_id' => $model->id]);
+            $total = 0;
+            foreach ($items as $item) {
+                $total += $item->total_price;
+                $item->status = 1;
+                $item->update(false);
+            }
+            $model->total_amount = $total;
+            $client = Clients::findOne(['id' => $model->client_id]);
+            $client->balance -= $total;
+            $client->update(false);
+        }
         $model->update(false);
         return $this->redirect(\Yii::$app->request->referrer);
 

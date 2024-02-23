@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
             ],
         ]); ?>
 
-        <?= $form->field($model, 'content')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'content')->textInput(['maxlength' => true,'value'=>'-']) ?>
 
         <div class="form-group mt-2">
             <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

@@ -14,8 +14,9 @@ use Yii;
  * @property int $rate_date
  * @property int $method_id
  * @property int $payment_type
+ * @property int $amount_type
  * @property int $client_id
- * @property int $content
+ * @property string $content
  * @property string $token
  * @property int $is_deleted
  * @property int $deleted_user_id
@@ -37,9 +38,10 @@ class Payment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created', 'amount', 'rate_id', 'method_id', 'payment_type', 'client_id', 'content', 'token'], 'required'],
-            [['created', 'amount', 'rate_id', 'method_id', 'payment_type', 'client_id', 'content', 'is_deleted', 'deleted_user_id', 'deleted_time','rate_amount','rate_date'], 'integer'],
+            [['created', 'amount', 'rate_amount', 'method_id', 'payment_type', 'client_id', 'content', 'token'], 'required'],
+            [['created', 'amount', 'method_id', 'payment_type', 'client_id', 'is_deleted', 'deleted_user_id', 'deleted_time', 'rate_amount', 'rate_date'], 'integer'],
             [['token'], 'string', 'max' => 6],
+            ['content', 'string', 'max' => 255]
         ];
     }
 
@@ -67,11 +69,11 @@ class Payment extends \yii\db\ActiveRecord
 
     public function getClient()
     {
-        return $this->hasOne(Clients::className(),['id'=>'client_id']);
+        return $this->hasOne(Clients::className(), ['id' => 'client_id']);
     }
 
     public function getRate()
     {
-        return $this->hasOne(CurrencyRate::className(),['id'=>'rate_id']);
+        return $this->hasOne(CurrencyRate::className(), ['id' => 'rate_id']);
     }
 }

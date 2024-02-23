@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\ClientPhone;
 use common\models\Clients;
+use common\models\Payment;
 use common\models\Sale;
 use common\models\search\ClientsSearch;
 use yii\filters\AccessControl;
@@ -30,6 +31,7 @@ class ClientController extends Controller
                         'delete' => ['POST'],
                         'create-phone' => ['post'],
                         'delete-phone' => ['post'],
+                        'make-payment' => ['post']
                     ],
                 ],
                 'access' => [
@@ -44,6 +46,7 @@ class ClientController extends Controller
                                 'view',
                                 'delete-phone',
                                 'update',
+                                'make-payment',
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -70,6 +73,34 @@ class ClientController extends Controller
         ]);
     }
 
+    public function actionMakePayment()
+    {
+        $model = new Payment();
+        if ($model->load(\Yii::$app->request->post())) {
+            $post = $_POST['Payment'];
+            $model->token = \Yii::$app->security->generateRandomString(6);
+            $model->created = time();
+            $model->rate_date = time();
+            $model->is_deleted = 0;
+            $model->deleted_user_id = 0;
+            $model->deleted_time = 0;
+            $model->method_id = 0;
+
+            if ($post['amount_type'] == 1) {
+                $model->content=$model->content . "( Приём оплаты в USD " . $post['amount'] . ' )';
+                $total = $post['amount'] * $post['rate_amount'];
+                $model->amount = $total;
+            }
+            if ($model->save(false)) {
+                $client = Clients::findOne(['id' => $model->client_id]);
+                $client->balance += $model->amount;
+                $client->updated = time();
+                $client->update(false);
+                return $this->redirect(\Yii::$app->request->referrer);
+            }
+        }
+    }
+
     /**
      * Displays a single Clients model.
      * @param int $id ID
@@ -81,11 +112,12 @@ class ClientController extends Controller
         $model = $this->findModel($id);
         $phone = ClientPhone::findAll(['client_id' => $model->id]);
         $sales = Sale::find()->where(['client_id' => $model->id])->orderBy(['id' => SORT_DESC])->limit(3)->all();
-
+        $payment = Payment::findAll(['client_id' => $model->id]);
         return $this->render('view', [
             'model' => $model,
             'phone' => $phone,
             'sales' => $sales,
+            'payment' => $payment,
         ]);
     }
 

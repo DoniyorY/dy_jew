@@ -55,10 +55,25 @@ class PaymentController extends Controller
     {
         $searchModel = new PaymentSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
+        $day_start = mktime('0', '0', '0');
+        $day_end = $day_start + 86399;
+        $today_cash = Payment::find()->where(['between', 'created', $day_start, $day_end])
+            ->andWhere(['is_deleted' => 0, 'payment_type' => 0])
+            ->sum('amount');
+        $today_card = Payment::find()->where(['between', 'created', $day_start, $day_end])
+            ->andWhere(['is_deleted' => 0, 'payment_type' => 1])
+            ->sum('amount');
+        $card = Payment::find()->where(['is_deleted' => 0, 'payment_type' => 1])
+            ->sum('amount');
+        $cash = Payment::find()->where(['is_deleted' => 0, 'payment_type' => 0])
+            ->sum('amount');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'today_cash' => $today_cash,
+            'today_card' => $today_card,
+            'card' => $card,
+            'cash' => $cash,
         ]);
     }
 
@@ -127,9 +142,9 @@ class PaymentController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->is_deleted=1;
-        $model->deleted_time=time();
-        $model->deleted_user_id=\Yii::$app->user->id;
+        $model->is_deleted = 1;
+        $model->deleted_time = time();
+        $model->deleted_user_id = \Yii::$app->user->id;
         $model->update();
         return $this->redirect(['index']);
     }

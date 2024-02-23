@@ -206,71 +206,30 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th>#</th>
                     <th>Дата создания</th>
                     <th>Сумма</th>
-                    <th>Метод</th>
                     <th>Курс</th>
-                    <th>Тип оплаты</th>
-                    <th></th>
+                    <th>Метод</th>
+                    <th>Примечание</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>20.01.2024</td>
-                    <td>300 000 uzs</td>
-                    <td>Приход</td>
-                    <td>12 430 uzs</td>
-                    <td>USD / UZS</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-primary">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>20.01.2024</td>
-                    <td>300 000 uzs</td>
-                    <td>Приход</td>
-                    <td>12 430 uzs</td>
-                    <td>USD / UZS</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-primary">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>20.01.2024</td>
-                    <td>300 000 uzs</td>
-                    <td>Приход</td>
-                    <td>12 430 uzs</td>
-                    <td>USD / UZS</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-primary">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>20.01.2024</td>
-                    <td>300 000 uzs</td>
-                    <td>Приход</td>
-                    <td>12 430 uzs</td>
-                    <td>USD / UZS</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-primary">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </td>
-                </tr>
+                <?php $i = 1;
+                $total = 0;
+                foreach ($payment as $item): ?>
+                    <tr>
+                        <td><?= $i ?></td>
+                        <td><?= date('d.m.Y', $item->created) ?></td>
+                        <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
+                        <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
+                        <td><?= Yii::$app->params['payment_method'][$item->method_id] ?></td>
+                        <td><?=$item->content?></td>
+                    </tr>
+                    <?php $i++;
+                    $total += $item->amount; endforeach; ?>
 
                 <tr class="table-dark">
                     <th></th>
                     <th>Итого</th>
-                    <th>1 200 000 uzs</th>
-                    <th></th>
+                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -290,11 +249,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <?=$this->render('_form_payment',['model'=>new \common\models\Payment(),'client_id'=>$model->id])?>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-primary">Сохранить</button>
+                    <?= $this->render('_form_payment', ['model' => new \common\models\Payment(), 'client_id' => $model->id]) ?>
                 </div>
             </div>
         </div>

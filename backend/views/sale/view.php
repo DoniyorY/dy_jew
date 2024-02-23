@@ -23,18 +23,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php
                 if ($model->status == 1):
                     ?>
-                    <a href="<?= Url::to(['status', 'id' => $model->token, 'status' => 2]) ?>" class="btn btn-success" data-method="post" data-confirm="Подтвердите действие!!!">
-                        Завершить
+                    <a href="<?= Url::to(['status', 'id' => $model->token, 'status' => 2]) ?>" class="btn btn-success"
+                       data-method="post" data-confirm="Подтвердите действие!!!">
+                        Активный
                     </a>
-                <?php
-                endif;
-                ?>
-                <a href="<?= Url::to(['update', 'id' => $model->token]) ?>" class="btn btn-primary">
-                    <i class="bi bi-pencil"></i> Редактировать
-                </a>
-                <a href="<?= Url::to(['delete', 'id' => $model->token]) ?>" class="btn btn-danger">
-                    <i class="bi bi-trash"></i> Удалить
-                </a>
+                    <a href="<?= Url::to(['update', 'id' => $model->token]) ?>" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Редактировать
+                    </a>
+                <?php endif; ?>
+                <?php if ($model->status == 2): ?>
+                    <a href="<?= Url::to(['delete', 'id' => $model->token]) ?>" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Удалить
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
         <div class="col-md-12 mt-4">
@@ -55,13 +56,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $model->user->fullname ?>
                     </td>
                     <th class="table-secondary">
-                        Дата обновления
+                        Дата обновления:
                     </th>
                     <td>
                         <?= date('d.m.Y', $model->updated) ?>
                     </td>
                     <th class="table-secondary">
-                        Статус
+                        Общая сумма:
+                    </th>
+                    <td>
+                        <?= Yii::$app->formatter->asDecimal($model->total_amount, 0) ?> UZS
+                    </td>
+                    <th class="table-secondary">
+                        Статус:
                     </th>
                     <td>
                         <span class="<?= Yii::$app->params['sale_status_badge'][$model->status] ?>">
@@ -76,9 +83,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <h2>Изделия</h2>
             <div class="row">
                 <div class="col-md-12">
-                    <?= $this->render('_form_item', ['model' => new SaleItem(), 'sale_id' => $model->id]) ?>
+                    <?php if ($model->status == 0 or $model->status == 1) {
+                        echo $this->render('_form_item', ['model' => new SaleItem(), 'sale_id' => $model->id]);
+                        echo "<hr class=\"mt-4\">";
+                    } ?>
                 </div>
-                <hr class="mt-4">
+
                 <div class="col-md-12">
                     <table class="table table-sm table-bordered table-striped text-center">
                         <thead>

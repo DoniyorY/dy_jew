@@ -101,6 +101,37 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionToken()
+    {
+        $url = 'https://partner.atmos.uz/token';
+        $data = ['grant_type' => 'client_credentials'];
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data),],
+        ];
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if (!$result) {
+            $error = error_get_last();
+            echo "HTTP request failed. Error was: " . $error['message'];
+        }
+        print_r($result);
+        die();
+        $client = new \yii\httpclient\Client();
+        $base64 = base64_encode('172fYvQ8WFgBTApUTzfHa56Wfwga:ZZY5BKwzgDFbyHqwbhFE0_QHuTYa');
+        $response = $client->post($url, $data, [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Authorization' => "Basic $base64",
+            'Host' => 'partner.atmos.uz',
+            'Content-Length' => 29
+        ])->send();
+        echo "<pre>";
+        print_r($response->data);
+
+    }
+
     /**
      * Logs out the current user.
      *
@@ -217,8 +248,8 @@ class SiteController extends Controller
      * Verify email address
      *
      * @param string $token
-     * @throws BadRequestHttpException
      * @return yii\web\Response
+     * @throws BadRequestHttpException
      */
     public function actionVerifyEmail($token)
     {
