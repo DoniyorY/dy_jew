@@ -101,13 +101,43 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $this->render('_phone_form', ['model' => new \common\models\ClientPhone(), 'client_id' => $model->id]) ?>
                     <hr>
                     <div class="row">
-                        <div class="col-md-12 mt-3">
+                        <div class="desktop-table">
+                            <div class="col-md-12 mt-3 d-none d-md-block">
+                                <table class="table table-sm table-bordered table-striped align-items-center">
+                                    <thead>
+                                    <th>#</th>
+                                    <th>Номер телефона</th>
+                                    <th>Примечание</th>
+                                    <th>Дата создания</th>
+                                    <th></th>
+                                    </thead>
+                                    <tbody>
+                                    <?php $i = 1;
+                                    foreach ($phone as $item): ?>
+                                        <tr>
+                                            <td><?= $i ?></td>
+                                            <td><?= $item->phone ?></td>
+                                            <td><?= $item->content ?></td>
+                                            <td><?= date('d.m.Y', $item->created) ?></td>
+                                            <td>
+                                                <a href="<?= \yii\helpers\Url::to(['delete-phone', 'id' => $item->id]) ?>"
+                                                   class="btn btn-danger btn-sm" data-method="post"
+                                                   data-confirm="Подтвердите действие">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php $i++; endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mobile-table d-block d-md-none">
                             <table class="table table-sm table-bordered table-striped align-items-center">
                                 <thead>
                                 <th>#</th>
                                 <th>Номер телефона</th>
                                 <th>Примечание</th>
-                                <th>Дата создания</th>
                                 <th></th>
                                 </thead>
                                 <tbody>
@@ -117,7 +147,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <td><?= $i ?></td>
                                         <td><?= $item->phone ?></td>
                                         <td><?= $item->content ?></td>
-                                        <td><?= date('d.m.Y', $item->created) ?></td>
                                         <td>
                                             <a href="<?= \yii\helpers\Url::to(['delete-phone', 'id' => $item->id]) ?>"
                                                class="btn btn-danger btn-sm" data-method="post"
@@ -136,7 +165,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
         </div>
         <div class="col-md-7 pt-3 pl-5">
-            <h4>История заказов</h4>
+            <div class="row">
+                <div class="col-md-10">
+                    <h4>История заказов</h4>
+                </div>
+                <div class="col-md-2">
+                    <a href="<?= Url::to(['sale/create', 'id' => $model->token]) ?>"
+                       class="btn-sm btn btn-success w-100" data-method="post">
+                        Создать заказ <i class="bi bi-plus-square"></i>
+                    </a>
+                </div>
+            </div>
             <?php foreach ($sales as $item): ?>
                 <div class="card text-center mt-1">
                     <div class="card-header">
@@ -155,43 +194,80 @@ $this->params['breadcrumbs'][] = $this->title;
                             </li>
                         </ul>
                     </div>
-                    <div class="card-body pb-1">
-                        <table class="table-bordered table-sm table-striped table">
-                            <thead>
-                            <tr class="table-primary">
-                                <th>#</th>
-                                <th>Наименование товара</th>
-                                <th>Сумма за грамм</th>
-                                <th>Вес</th>
-                                <th>Итого</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $i = 1;
-                            $sale_items = SaleItem::findAll(['sale_id' => $item->id]);
-                            $weight = 0;
-                            $total = 0;
-                            foreach ($sale_items as $val):?>
-                                <tr>
-                                    <td><?= $i ?></td>
-                                    <td><?= $val->product->name . ' ( ' . $val->product->type->name . ' ) ' ?></td>
-                                    <td><?= Yii::$app->formatter->asDecimal($val->price, 0) ?> UZS</td>
-                                    <td><?= $val->weight ?> гр</td>
-                                    <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
+                    <div class="desktop-table d-none d-md-block">
+                        <div class="card-body pb-1">
+                            <table class="table-bordered table-sm table-striped table">
+                                <thead>
+                                <tr class="table-primary">
+                                    <th>#</th>
+                                    <th>Наименование товара</th>
+                                    <th>Сумма за грамм</th>
+                                    <th>Вес</th>
+                                    <th>Итого</th>
                                 </tr>
-                                <?php $i++;
-                                $weight += $val->weight;
-                                $total += $val->total_price; endforeach; ?>
-                            <tr class="table-dark">
-                                <th></th>
-                                <th>Итого</th>
-                                <th></th>
-                                <th><?= $weight ?> гр</th>
-                                <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
-                            </tr>
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                <?php $i = 1;
+                                $sale_items = SaleItem::findAll(['sale_id' => $item->id]);
+                                $weight = 0;
+                                $total = 0;
+                                foreach ($sale_items as $val):?>
+                                    <tr>
+                                        <td><?= $i ?></td>
+                                        <td><?= $val->product->name . ' ( ' . $val->product->type->name . ' ) ' ?></td>
+                                        <td><?= Yii::$app->formatter->asDecimal($val->price, 0) ?> UZS</td>
+                                        <td><?= $val->weight ?> гр</td>
+                                        <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
+                                    </tr>
+                                    <?php $i++;
+                                    $weight += $val->weight;
+                                    $total += $val->total_price; endforeach; ?>
+                                <tr class="table-dark">
+                                    <th></th>
+                                    <th>Итого</th>
+                                    <th></th>
+                                    <th><?= $weight ?> гр</th>
+                                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                                </tr>
+                                </tbody>
 
-                        </table>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="mobile-table d-block d-md-none">
+                        <div class="card-body pb-1">
+                            <table class="table-bordered table-sm table-striped table">
+                                <thead>
+                                <tr class="table-primary">
+                                    <th>#</th>
+                                    <th>Изделие</th>
+
+                                    <th>Итого</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php $i = 1;
+                                $sale_items = SaleItem::findAll(['sale_id' => $item->id]);
+                                $weight = 0;
+                                $total = 0;
+                                foreach ($sale_items as $val):?>
+                                    <tr>
+                                        <td><?= $i ?></td>
+                                        <td><?= $val->product->name . ' ( ' . $val->product->type->name . ' ) ' ?></td>
+                                        <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
+                                    </tr>
+                                    <?php $i++;
+                                    $weight += $val->weight;
+                                    $total += $val->total_price; endforeach; ?>
+                                <tr class="table-dark">
+                                    <th></th>
+                                    <th>Итого</th>
+                                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                                </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -199,42 +275,79 @@ $this->params['breadcrumbs'][] = $this->title;
         <hr>
         <div class="col-md-12">
             <h4>История оплат <i class="bi bi-hourglass-split"></i></h4>
-            <table class="table table-sm table-bordered table-striped text-center">
-                <thead>
-                <tr class="table-warning">
-                    <th>#</th>
-                    <th>Дата создания</th>
-                    <th>Сумма</th>
-                    <th>Курс</th>
-                    <th>Метод</th>
-                    <th>Примечание</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php $i = 1;
-                $total = 0;
-                foreach ($payment as $item): ?>
-                    <tr>
-                        <td><?= $i ?></td>
-                        <td><?= date('d.m.Y', $item->created) ?></td>
-                        <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
-                        <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
-                        <td><?= Yii::$app->params['payment_method'][$item->method_id] ?></td>
-                        <td><?= $item->content ?></td>
+            <div class="desktop-table d-none d-md-block">
+                <table class="table table-sm table-bordered table-striped text-center">
+                    <thead>
+                    <tr class="table-warning">
+                        <th>#</th>
+                        <th>Дата создания</th>
+                        <th>Сумма</th>
+                        <th>Курс</th>
+                        <th>Метод</th>
+                        <th>Примечание</th>
                     </tr>
-                    <?php $i++;
-                    $total += $item->amount; endforeach; ?>
+                    </thead>
+                    <tbody>
+                    <?php $i = 1;
+                    $total = 0;
+                    foreach ($payment as $item): ?>
+                        <tr>
+                            <td><?= $i ?></td>
+                            <td><?= date('d.m.Y', $item->created) ?></td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
+                            <td><?= Yii::$app->params['payment_method'][$item->method_id] ?></td>
+                            <td><?= $item->content ?></td>
+                        </tr>
+                        <?php $i++;
+                        $total += $item->amount; endforeach; ?>
 
-                <tr class="table-dark">
-                    <th></th>
-                    <th>Итого</th>
-                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </tbody>
-            </table>
+                    <tr class="table-dark">
+                        <th></th>
+                        <th>Итого</th>
+                        <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mobile-table d-block d-md-none">
+                <table class="table table-sm table-bordered table-striped text-center">
+                    <thead>
+                    <tr class="table-warning">
+                        <th>#</th>
+                        <th>Дата создания</th>
+                        <th>Сумма</th>
+                        <th>Курс</th>
+                        <th>Примечание</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php $i = 1;
+                    $total = 0;
+                    foreach ($payment as $item): ?>
+                        <tr>
+                            <td><?= $i ?></td>
+                            <td><?= date('d.m.Y', $item->created) ?></td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
+                            <td></td>
+                        </tr>
+                        <?php $i++;
+                        $total += $item->amount; endforeach; ?>
+
+                    <tr class="table-dark">
+                        <th></th>
+                        <th>Итого</th>
+                        <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

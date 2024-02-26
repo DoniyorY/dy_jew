@@ -109,6 +109,11 @@ class SaleController extends Controller
         ]);
     }
 
+    /**
+     * @throws \Throwable
+     * @throws StaleObjectException
+     * @throws NotFoundHttpException
+     */
     public function actionStatus($id, $status)
     {
         $model = $this->findModel($id);
@@ -118,6 +123,10 @@ class SaleController extends Controller
         //If Status Complete
         if ($status == 2) {
             $items = SaleItem::findAll(['sale_id' => $model->id]);
+            if (!$items){
+                \Yii::$app->session->setFlash('warning','Товары отсутствуют!!!');
+                return $this->redirect(\Yii::$app->request->referrer);
+            }
             $total = 0;
             foreach ($items as $item) {
                 $total += $item->total_price;
@@ -140,13 +149,18 @@ class SaleController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($id = false)
     {
         $model = new Sale();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post())) {
+            if (\Yii::$app->request->post()) {
+                if ($id) {
+                    $client = Clients::findOne(['token' => $id]);
+                    $model->client_id = $client->id;
+                }
                 $model->created = time();
+                $model->content = '-';
                 $model->updated = time();
                 $model->user_id = \Yii::$app->user->id;
                 $model->total_amount = 0;

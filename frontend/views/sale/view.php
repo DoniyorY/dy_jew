@@ -30,6 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <a href="<?= Url::to(['update', 'id' => $model->token]) ?>" class="btn btn-primary">
                         <i class="bi bi-pencil"></i> Редактировать
                     </a>
+                    <a href="<?= Url::to(['delete', 'id' => $model->token]) ?>" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Удалить
+                    </a>
                 <?php endif; ?>
                 <?php if ($model->status == 2): ?>
                     <a href="<?= Url::to(['delete', 'id' => $model->token]) ?>" class="btn btn-danger">
@@ -38,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php endif; ?>
             </div>
         </div>
-        <div class="col-md-12 mt-4">
+        <div class="col-md-12 d-none mt-4">
             <table class="table-bordered table-sm table">
                 <tr>
                     <th class="table-secondary">Клиент:</th>
@@ -78,6 +81,37 @@ $this->params['breadcrumbs'][] = $this->title;
                 </tr>
             </table>
         </div>
+        <div class="col-12 p-3">
+            <div class="row border">
+                <div class="col-6 p-2 border ">
+                    Клиент:
+                </div>
+                <div class="col-6 p-2 border">
+                    <?= $model->client->fullname ?>
+                    <a class="btn btn-sm btn-primary" href="<?= Url::to(['client/view', 'id' => $model->client->token]) ?>">
+                        <i class="bi bi-person"></i>
+                    </a>
+                </div>
+                <div class="col-6 p-2 border ">
+                    Дата обновления:
+                </div>
+                <div class="col-6 p-2 border">
+                    <?= date('d.m.Y', $model->updated) ?>
+                </div>
+                <div class="col-6 p-2 border">
+                    Общая сумма:
+                </div>
+                <div class="col-6 p-2 border">
+                    <?= Yii::$app->formatter->asDecimal($model->total_amount, 0) ?> UZS
+                </div>
+                <div class="col-6 p-2 border">
+                    Статус:
+                </div>
+                <div class="col-6 p-2 border">
+                    <span class="<?= Yii::$app->params['sale_status_badge'][$model->status] ?>"> <?= Yii::$app->params['sale_status'][$model->status] ?></span>
+                </div>
+            </div>
+        </div>
         <hr>
         <div class="col-md-12">
             <h2>Изделия</h2>
@@ -94,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <thead>
                         <tr class="table-primary">
                             <th>#</th>
-                            <th>Название товара</th>
+                            <th>Изделие</th>
                             <th>Цена</th>
                             <th>Вес</th>
                             <th>Итоговая сумма</th>
