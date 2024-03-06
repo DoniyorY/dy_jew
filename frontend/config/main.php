@@ -15,6 +15,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'baseUrl'=>'',
         ],
         'user' => [
             'identityClass' => 'common\models\User',

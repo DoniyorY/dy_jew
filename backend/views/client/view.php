@@ -19,12 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
         <div class="col-md-4 text-center mt-2">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                    data-bs-target="#clientBalanceModal">
-                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?> UZS
-            </button>
         </div>
         <div class="col-md-4 text-end mt-2">
+            <?php if(Yii::$app->user->identity->role_id == 0):?>
             <div class="btn-group">
                 <a href="<?= \yii\helpers\Url::to(['update', 'id' => $model->token]) ?>" class="btn btn-primary">
                     <i class="bi bi-pencil"></i> Редактировать
@@ -34,9 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     Удалить <i class="bi bi-trash"></i>
                 </a>
             </div>
-
+            <?php endif;?>
         </div>
-        <div class="col-md-5 mt-4">
+        <div class="col-md-12 mt-4">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-client-info" data-bs-toggle="tab"
@@ -58,12 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'id',
                             'fullname',
                             'phone',
-                            [
-                                'attribute' => 'balance',
-                                'value' => function ($data) {
-                                    return Yii::$app->formatter->asDecimal($data->balance, 0) . ' UZS';
-                                }
-                            ],
                             [
                                 'attribute' => 'created',
                                 'value' => function ($data) {
@@ -135,107 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
         </div>
-        <div class="col-md-7 pt-3 pl-5">
-            <h4>История заказов</h4>
-            <?php foreach ($sales as $item): ?>
-                <div class="card text-center mt-1">
-                    <div class="card-header">
-                        <ul class="nav nav-pills card-header-pills justify-content-between">
-                            <li class="nav-item">
-                                <a href="<?= Url::to(['sale/view', 'id' => $item->token]) ?>" target="_blank"
-                                   class="btn btn-primary btn-sm">
-                                    <i class="bi bi-journal-text"></i> Заказ № <?= $item->id ?>
-                                    от <?= date('d.m.Y', $item->created) ?>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <div class="<?= Yii::$app->params['sale_status_badge'][$item->status] ?>">
-                                    <?= Yii::$app->params['sale_status'][$item->status] ?>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body pb-1">
-                        <table class="table-bordered table-sm table-striped table">
-                            <thead>
-                            <tr class="table-primary">
-                                <th>#</th>
-                                <th>Наименование товара</th>
-                                <th>Сумма за грамм</th>
-                                <th>Вес</th>
-                                <th>Итого</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $i = 1;
-                            $sale_items = SaleItem::findAll(['sale_id' => $item->id]);
-                            $weight = 0;
-                            $total = 0;
-                            foreach ($sale_items as $val):?>
-                                <tr>
-                                    <td><?= $i ?></td>
-                                    <td><?= $val->product->name . ' ( ' . $val->product->type->name . ' ) ' ?></td>
-                                    <td><?= Yii::$app->formatter->asDecimal($val->price, 0) ?> UZS</td>
-                                    <td><?= $val->weight ?> гр</td>
-                                    <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
-                                </tr>
-                                <?php $i++;
-                                $weight += $val->weight;
-                                $total += $val->total_price; endforeach; ?>
-                            <tr class="table-dark">
-                                <th></th>
-                                <th>Итого</th>
-                                <th></th>
-                                <th><?= $weight ?> гр</th>
-                                <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
-                            </tr>
-                            </tbody>
 
-                        </table>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-        <hr>
-        <div class="col-md-12">
-            <h4>История оплат <i class="bi bi-hourglass-split"></i></h4>
-            <table class="table table-sm table-bordered table-striped text-center">
-                <thead>
-                <tr class="table-warning">
-                    <th>#</th>
-                    <th>Дата создания</th>
-                    <th>Сумма</th>
-                    <th>Курс</th>
-                    <th>Метод</th>
-                    <th>Примечание</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php $i = 1;
-                $total = 0;
-                foreach ($payment as $item): ?>
-                    <tr>
-                        <td><?= $i ?></td>
-                        <td><?= date('d.m.Y', $item->created) ?></td>
-                        <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
-                        <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
-                        <td><?= Yii::$app->params['payment_method'][$item->method_id] ?></td>
-                        <td><?= $item->content ?></td>
-                    </tr>
-                    <?php $i++;
-                    $total += $item->amount; endforeach; ?>
-
-                <tr class="table-dark">
-                    <th></th>
-                    <th>Итого</th>
-                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 
     <!-- Modal -->

@@ -28,12 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
             'fullname',
             'phone',
-            [
+            /*[
                 'attribute' => 'balance',
                 'value' => function ($data) {
                     return Yii::$app->formatter->asDecimal($data->balance, 0) . ' uzs';
                 }
-            ],
+            ],*/
             [
                 'attribute' => 'created',
                 'value' => function ($data) {

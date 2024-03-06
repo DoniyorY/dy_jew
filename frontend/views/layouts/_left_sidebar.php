@@ -32,10 +32,34 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
 
 <div class="accordion accordion-flush" id="accordionFlushExample">
     <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#accordionIncome" aria-expanded="false" aria-controls="accordionIncome">
+                <i class="bi bi-house text-success"></i>
+                <?php echo "Информация о складе" ?>
+            </button>
+        </h2>
+        <div id="accordionIncome" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+             data-bs-parent="#accordionClients">
+            <div class="accordion-body">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['warehouse/index']); ?>"><i
+                                    class="bi bi-chevron-right"></i> <?php echo "Склад" ?></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['income/index']); ?>"><i
+                                    class="bi bi-chevron-right"></i> <?php echo "Приход" ?></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingPays">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#flush-collapsPays" aria-expanded="false" aria-controls="flush-collapseOne">
-                <i class="bi bi-arrow-repeat text-success"></i> Заказы
+                <i class="bi bi-list-check text-success"></i> Заказы
             </button>
         </h2>
         <div id="flush-collapsPays" class="accordion-collapse collapse" aria-labelledby="flush-headingPays"

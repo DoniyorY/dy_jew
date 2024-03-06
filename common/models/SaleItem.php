@@ -48,7 +48,7 @@ class SaleItem extends \yii\db\ActiveRecord
             'id' => 'ID',
             'sale_id' => 'Заказ',
             'product_id' => 'Товар',
-            'price' => 'Цена',
+            'price' => 'Цена за грамм',
             'created' => 'Дата создания',
             'count' => 'Количество',
             'weight' => 'Вес',

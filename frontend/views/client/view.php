@@ -9,7 +9,7 @@ use yii\widgets\DetailView;
 /** @var common\models\Clients $model */
 
 $this->title = $model->fullname;
-$this->params['breadcrumbs'][] = ['label' => 'Клиент', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Клиенты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -97,8 +97,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="tab-pane p-1 fade" id="client-phone" role="tabpanel" aria-labelledby="client-phone-tab"
                      tabindex="0">
-                    <h4>Добавить номер</h4>
-                    <?= $this->render('_phone_form', ['model' => new \common\models\ClientPhone(), 'client_id' => $model->id]) ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Дополнительные номера</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#createAdditionalPhone">
+                                Добавить номер <i class="bi bi-plus-square"></i>
+                            </button>
+                        </div>
+                    </div>
                     <hr>
                     <div class="row">
                         <div class="desktop-table">
@@ -166,12 +175,12 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-7 pt-3 pl-5">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <h4>История заказов</h4>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <a href="<?= Url::to(['sale/create', 'id' => $model->token]) ?>"
-                       class="btn-sm btn btn-success w-100" data-method="post">
+                       class="btn btn-success w-100" data-method="post" data-confirm="Подтвердите действие">
                         Создать заказ <i class="bi bi-plus-square"></i>
                     </a>
                 </div>
@@ -363,6 +372,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="modal-body">
                     <?= $this->render('_form_payment', ['model' => new \common\models\Payment(), 'client_id' => $model->id]) ?>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="createAdditionalPhone" tabindex="-1" aria-labelledby="createAdditionalPhoneLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createAdditionalPhoneLabel">Новый номер</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?= $this->render('_phone_form', ['model' => new \common\models\ClientPhone(), 'client_id' => $model->id]) ?>
             </div>
         </div>
     </div>

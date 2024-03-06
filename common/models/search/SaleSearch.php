@@ -17,7 +17,7 @@ class SaleSearch extends Sale
     public function rules()
     {
         return [
-            [['id', 'created', 'client_id','user_id', 'total_amount', 'status', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
+            [['id', 'created', 'client_id', 'user_id', 'total_amount', 'status', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
             [['token', 'content'], 'safe'],
         ];
     }
@@ -40,7 +40,7 @@ class SaleSearch extends Sale
      */
     public function search($params)
     {
-        $query = Sale::find();
+        $query = Sale::find()->andFilterWhere(['is_deleted' => 0]);
 
         // add conditions that should always apply here
 
@@ -52,7 +52,7 @@ class SaleSearch extends Sale
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+            $query->andFilterWhere(['is_deleted' => 0]);
             return $dataProvider;
         }
 

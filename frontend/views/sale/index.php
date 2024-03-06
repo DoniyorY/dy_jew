@@ -41,20 +41,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->client->fullname;
                 }
             ],
-            [
+            /*[
                 'attribute' => 'user_id',
                 'value' => function ($data) {
                     return $data->user->fullname;
                 },
                 'filter'=>\yii\helpers\ArrayHelper::map(\common\models\User::findAll(['status'=>10]),'id','username')
-            ],
+            ],*/
             [
                 'attribute' => 'total_amount',
                 'value' => function ($data) {
                     return Yii::$app->formatter->asDecimal($data->total_amount,0);
                 }
             ],
-            'content',
+            //'content',
             [
                 'attribute' => 'status',
                 'value' => function ($data) {

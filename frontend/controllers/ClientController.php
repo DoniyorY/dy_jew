@@ -123,7 +123,7 @@ class ClientController extends Controller
         $model = $this->findModel($id);
         $phone = ClientPhone::findAll(['client_id' => $model->id]);
         $sales = Sale::find()->where(['client_id' => $model->id, 'is_deleted' => 0])->orderBy(['id' => SORT_DESC])->limit(2)->all();
-        $payment = Payment::find()->where(['client_id' => $model->id])->orderBy(['id' => SORT_DESC])->limit(10)->all();
+        $payment = Payment::find()->where(['client_id' => $model->id, 'is_deleted' => 0])->orderBy(['id' => SORT_DESC])->limit(10)->all();
         return $this->render('view', [
             'model' => $model,
             'phone' => $phone,

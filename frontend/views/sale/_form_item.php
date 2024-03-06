@@ -12,7 +12,7 @@ use yii\helpers\Url;
 <div class="row">
     <div class="col-md-3">
         <?= $form->field($model, 'product_id')->widget(Select2::class, [
-            'data' => \yii\helpers\ArrayHelper::map(\common\models\Products::find()->all(), 'id', 'info'),
+            'data' => \yii\helpers\ArrayHelper::map(\common\models\Warehouse::find()->all(), 'product_id', 'info'),
             'language' => 'ru',
             'options' => [
                 'placeholder' => 'Выберите продукт',

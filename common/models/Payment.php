@@ -64,7 +64,7 @@ class Payment extends \yii\db\ActiveRecord
             'is_deleted' => 'Is Deleted',
             'deleted_user_id' => 'Deleted User ID',
             'deleted_time' => 'Deleted Time',
-            'amount_type'=>'Валюта'
+            'amount_type' => 'Валюта'
         ];
     }
 
@@ -83,13 +83,50 @@ class Payment extends \yii\db\ActiveRecord
      * @param $fieldName
      * @return string|null
      */
-    public static function getTotalCount($dataProvider, $fieldName){
+    public static function getTotalCount($dataProvider, $fieldName)
+    {
         $totalBalance = 0;
 
-        foreach ($dataProvider as $item){
+        foreach ($dataProvider as $item) {
             $totalBalance += $item[$fieldName];
         }
 
-        return yii::$app->formatter->asDecimal($totalBalance,0);
+        return yii::$app->formatter->asDecimal($totalBalance, 0);
+    }
+
+    public function createOutcome()
+    {
+
+        $post = $_POST['Payment'];
+        $this->created = time();
+        $this->amount = $post['amount'] * -1;
+        $this->rate_amount = $post['rate_amount'];
+        $this->rate_date = time();
+        $this->method_id = 0;
+        $this->content = $post['content'];
+        $this->payment_type = 1;
+        $this->amount_type = $post['amount_type'];
+        if ($post['amount_type'] == 1) {
+            $this->amount = ($post['amount'] * $post['rate_amount'] * -1);
+            $this->content = $this->content . "( Приём оплаты в USD " . $post['amount'] . ' )';
+            $curr = CurrencyRate::findOne(['status' => 0]);
+            $curr->status = 1;
+            $curr->updated = time();
+            $curr->update(false);
+            $new_curr = new CurrencyRate();
+            $new_curr->created = time();
+            $new_curr->amount = $post['rate_amount'];
+            $new_curr->updated = 0;
+            $new_curr->status = 0;
+            $new_curr->save();
+        }
+        $this->client_id = 0;
+        $this->token = \Yii::$app->security->generateRandomString(6);
+        $this->is_deleted = 0;
+        $this->deleted_time = 0;
+        $this->deleted_user_id = 0;
+        if ($this->save()) {
+            return true;
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\Clients;
 use common\models\Sale;
 use common\models\SaleItem;
+use common\models\Warehouse;
 use common\models\search\SaleSearch;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
@@ -44,7 +45,9 @@ class SaleController extends Controller
                                 'create-item',
                                 'delete-item',
                                 'view',
-                                'status'
+                                'status',
+                                'registration',
+                                'active'
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -72,16 +75,39 @@ class SaleController extends Controller
         ]);
     }
 
+    public function actionRegistration()
+    {
+        $searchModel = new SaleSearch();
+        $searchModel->status = 1;
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->orderBy(['id' => SORT_DESC]);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionActive()
+    {
+        $searchModel = new SaleSearch();
+        $searchModel->status = 2;
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->orderBy(['id' => SORT_DESC]);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionCreateItem()
     {
         $model = new SaleItem();
         if ($model->load(\Yii::$app->request->post())) {
-            /*echo "<pre>";
-            print_r($_POST);
-            die();*/
             $model->created = time();
             $model->status = 0;
-            $model->count = 0;
+            $model->count = 1;
             $model->save(false);
             return $this->redirect(\Yii::$app->request->referrer);
 
@@ -96,7 +122,8 @@ class SaleController extends Controller
      */
     public function actionView($id)
     {
-
+     $today_start=strtotime('today');
+     $today_end=$today_start+86399;
         $model = $this->findModel($id);
         if ($model->status == 0) {
             $model->status = 1;
@@ -105,7 +132,9 @@ class SaleController extends Controller
         $items = SaleItem::findAll(['sale_id' => $model->id]);
         return $this->render('view', [
             'model' => $model,
-            'items' => $items
+            'items' => $items,
+            'today_start'=>$today_start,
+            'today_end'=>$today_end,
         ]);
     }
 
@@ -123,12 +152,16 @@ class SaleController extends Controller
         //If Status Complete
         if ($status == 2) {
             $items = SaleItem::findAll(['sale_id' => $model->id]);
-            if (!$items){
-                \Yii::$app->session->setFlash('warning','Товары отсутствуют!!!');
+            if (!$items) {
+                \Yii::$app->session->setFlash('warning', 'Товары отсутствуют!!!');
                 return $this->redirect(\Yii::$app->request->referrer);
             }
             $total = 0;
+
             foreach ($items as $item) {
+                $warehouse = Warehouse::findOne(['product_id' => $item->product_id, 'gold_type_id' => $item->product->gold_type_id]);
+                $warehouse->count -= $item->count;
+                $warehouse->update(false);
                 $total += $item->total_price;
                 $item->status = 1;
                 $item->update(false);
@@ -138,6 +171,19 @@ class SaleController extends Controller
             $client->balance -= $total;
             $client->update(false);
         }
+        // If Status Returned
+        if ($status == 1) {
+            $items = SaleItem::findAll(['sale_id' => $model->id]);
+            foreach ($items as $item) {
+                $warehouse = Warehouse::findOne(['product_id' => $item->product_id, 'gold_type_id' => $item->product->gold_type_id]);
+                $warehouse->count += $item->count;
+                $warehouse->update(false);
+            }
+            $client = Clients::findOne(['id' => $model->client_id]);
+            $client->balance += $model->total_amount;
+            $client->update(false);
+        }
+
         $model->update(false);
         return $this->redirect(\Yii::$app->request->referrer);
 
@@ -155,18 +201,7 @@ class SaleController extends Controller
 
         if ($this->request->isPost) {
             if (\Yii::$app->request->post()) {
-                if ($id) {
-                    $client = Clients::findOne(['token' => $id]);
-                    $model->client_id = $client->id;
-                }
-                $model->created = time();
-                $model->content = '-';
-                $model->updated = time();
-                $model->user_id = \Yii::$app->user->id;
-                $model->total_amount = 0;
-                $model->token = \Yii::$app->security->generateRandomString(6);
-                $model->status = 0;
-                $model->save();
+                $model->createSale($id);
                 return $this->redirect(['view', 'id' => $model->token]);
             }
         } else {
