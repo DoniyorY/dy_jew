@@ -10,8 +10,14 @@ class m240306_113053_warehouse extends Migration
     /**
      * {@inheritdoc}
      */
-    public function safeUp()
+    public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // https://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('warehouse', [
             'id' => $this->primaryKey(),
             'product_id' => $this->integer(),
@@ -20,17 +26,15 @@ class m240306_113053_warehouse extends Migration
             'user_id' => $this->integer(),
             'status' => $this->integer(),
             'count' => $this->integer(),
-        ]);
+        ],$tableOptions);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function safeDown()
+    public function down()
     {
-        echo "m240306_113053_warehouse cannot be reverted.\n";
-
-        return false;
+     $this->dropTable('warehouse');
     }
 
     /*

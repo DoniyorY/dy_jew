@@ -10,8 +10,14 @@ class m240306_113037_sale extends Migration
     /**
      * {@inheritdoc}
      */
-    public function safeUp()
+    public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // https://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('sale',[
             'id'=>$this->primaryKey(),
             'created'=>$this->integer(),
@@ -25,7 +31,7 @@ class m240306_113037_sale extends Migration
             'deleted_user_id'=>$this->integer(),
             'deleted_time'=>$this->integer(),
             'content'=>$this->string(255),
-        ]);
+        ],$tableOptions);
     }
 
     /**
@@ -33,9 +39,7 @@ class m240306_113037_sale extends Migration
      */
     public function safeDown()
     {
-        echo "m240306_113037_sale cannot be reverted.\n";
-
-        return false;
+        $this->dropTable('sale');
     }
 
     /*
