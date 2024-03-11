@@ -23,8 +23,13 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             <td><?php echo "Курс"; ?></td>
             <td><?php
                 $rate = \common\models\CurrencyRate::findOne(['status' => 0]);
-                echo Yii::$app->formatter->asDecimal($rate->amount, 0) . ' UZS';
-                ?></td>
+                if ($rate){
+                    echo Yii::$app->formatter->asDecimal($rate->amount, 0) . ' UZS';
+                }else{
+                    echo 0;
+                }
+                ?>
+            </td>
         </tr>
     </table>
     <hr/>
