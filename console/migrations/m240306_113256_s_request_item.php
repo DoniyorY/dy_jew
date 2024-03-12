@@ -20,12 +20,12 @@ class m240306_113256_s_request_item extends Migration
 
         $this->createTable('s_request_item', [
             'id' => $this->primaryKey(),
-            's_request_id' => $this->integer(),
-            'product_id' => $this->integer(),
-            'gold_type_id' => $this->integer(),
-            'count' => $this->integer(),
-            'status' => $this->integer(),
-            'created' => $this->integer(),
+            's_request_id' => $this->integer()->notNull(),
+            'product_id' => $this->integer()->notNull(),
+            'gold_type_id' => $this->integer()->notNull(),
+            'count' => $this->integer()->notNull(),
+            'status' => $this->integer()->notNull(),
+            'created' => $this->integer()->notNull(),
             'content' => $this->string()
         ], $tableOptions);
     }

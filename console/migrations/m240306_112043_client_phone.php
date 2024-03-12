@@ -20,10 +20,10 @@ class m240306_112043_client_phone extends Migration
         }
         $this->createTable('client_phone',[
             'id'=>$this->primaryKey(),
-            'client_id'=>$this->integer(),
-            'phone'=>$this->string(13),
-            'content'=>$this->string(255),
-            'created'=>$this->integer()
+            'client_id'=>$this->integer()->notNull(),
+            'phone'=>$this->string(13)->notNull(),
+            'content'=>$this->string(255)->notNull(),
+            'created'=>$this->integer()->notNull()
         ],$tableOptions);
     }
 

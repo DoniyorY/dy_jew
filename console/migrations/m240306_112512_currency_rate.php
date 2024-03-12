@@ -19,10 +19,10 @@ class m240306_112512_currency_rate extends Migration
         }
         $this->createTable('currency_rate', [
             'id' => $this->primaryKey(),
-            'created' => $this->integer(),
-            'updated' => $this->integer(),
-            'amount' => $this->integer(),
-            'status' => $this->smallInteger()
+            'created' => $this->integer()->notNull(),
+            'updated' => $this->integer()->notNull(),
+            'amount' => $this->integer()->notNull(),
+            'status' => $this->smallInteger()->notNull()
         ],
         $tableOptions);
     }

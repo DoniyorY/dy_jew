@@ -20,9 +20,9 @@ class m240306_113249_s_request extends Migration
 
         $this->createTable('s_request',[
             'id'=>$this->primaryKey(),
-            'client_id'=>$this->integer(),
-            'created'=>$this->integer(),
-            'status'=>$this->integer(),
+            'client_id'=>$this->integer()->notNull(),
+            'created'=>$this->integer()->notNull(),
+            'status'=>$this->integer()->notNull(),
         ],$tableOptions);
     }
 

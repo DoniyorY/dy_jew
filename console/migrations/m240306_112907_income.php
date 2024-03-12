@@ -20,11 +20,11 @@ class m240306_112907_income extends Migration
 
         $this->createTable('income',[
             'id'=>$this->primaryKey(),
-            'token'=>$this->string(6),
-            'created'=>$this->integer(),
-            'user_id'=>$this->integer(),
-            'status'=>$this->integer(),
-            'total_amount'=>$this->integer(),
+            'token'=>$this->string(6)->notNull(),
+            'created'=>$this->integer()->notNull(),
+            'user_id'=>$this->integer()->notNull(),
+            'status'=>$this->integer()->notNull(),
+            'total_amount'=>$this->integer()->notNull(),
             'is_deleted'=>$this->integer(),
             'deleted_time'=>$this->integer(),
             'deleted_user_id'=>$this->integer(),

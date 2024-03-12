@@ -20,12 +20,12 @@ class m240306_113053_warehouse extends Migration
 
         $this->createTable('warehouse', [
             'id' => $this->primaryKey(),
-            'product_id' => $this->integer(),
-            'gold_type_id' => $this->integer(),
-            'updated' => $this->integer(),
-            'user_id' => $this->integer(),
-            'status' => $this->integer(),
-            'count' => $this->integer(),
+            'product_id' => $this->integer()->notNull(),
+            'gold_type_id' => $this->integer()->notNull(),
+            'updated' => $this->integer()->notNull(),
+            'user_id' => $this->integer()->notNull(),
+            'status' => $this->integer()->notNull(),
+            'count' => $this->integer()->notNull(),
         ],$tableOptions);
     }
 

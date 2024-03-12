@@ -20,10 +20,10 @@ class m240306_112937_income_item extends Migration
 
         $this->createTable('income_item',[
             'id'=>$this->primaryKey(),
-            'product_id'=>$this->integer(),
-            'count'=>$this->integer(),
-            'unit_amount'=>$this->integer(),
-            'income_id'=>$this->integer(),
+            'product_id'=>$this->integer()->notNull(),
+            'count'=>$this->integer()->notNull(),
+            'unit_amount'=>$this->integer()->notNull(),
+            'income_id'=>$this->integer()->notNull(),
             'is_deleted'=>$this->integer(),
             'deleted_time'=>$this->integer(),
             'deleted_user_id'=>$this->integer(),

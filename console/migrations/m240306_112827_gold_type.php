@@ -20,8 +20,8 @@ class m240306_112827_gold_type extends Migration
 
         $this->createTable('gold_type',[
             'id'=>$this->primaryKey(),
-            'name'=>$this->string(255),
-            'value'=>$this->float(),
+            'name'=>$this->string(255)->notNull(),
+            'value'=>$this->float()->notNull(),
         ],$tableOptions);
     }
 

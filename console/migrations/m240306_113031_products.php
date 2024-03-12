@@ -20,11 +20,11 @@ class m240306_113031_products extends Migration
 
         $this->createTable('products',[
             'id'=>$this->primaryKey(),
-            'name'=>$this->string(255),
-            'gold_type_id'=>$this->integer(),
-            'created'=>$this->integer(),
-            'status'=>$this->integer(),
-            'updated'=>$this->integer(),
+            'name'=>$this->string(255)->notNull(),
+            'gold_type_id'=>$this->integer()->notNull(),
+            'created'=>$this->integer()->notNull(),
+            'status'=>$this->integer()->notNull(),
+            'updated'=>$this->integer()->notNull(),
             'is_deleted'=>$this->integer(),
             'deleted_time'=>$this->integer(),
             'deleted_user_id'=>$this->integer(),
