@@ -64,7 +64,7 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
         <h2 class="accordion-header" id="flush-headingPays">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#flush-collapsPays" aria-expanded="false" aria-controls="flush-collapseOne">
-                <i class="bi bi-list-check text-success"></i> Заказы
+                <i class="bi bi-list-check text-success"></i> Информация о заказах
             </button>
         </h2>
         <div id="flush-collapsPays" class="accordion-collapse collapse" aria-labelledby="flush-headingPays"
@@ -72,11 +72,15 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             <div class="accordion-body">
                 <ul class="nav flex-column">
                     <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['s-request/index']); ?>">
+                            <i class="bi bi-chevron-right"></i> Список заявок
+                        </a>
+                        <hr>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/create']); ?>">
                             <i class="bi bi-chevron-right"></i> Новые Заказы
                         </a>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/index']); ?>">
-                            <i class="bi bi-chevron-right"></i> Список заявок
+                            <i class="bi bi-chevron-right"></i> Список заказы
                         </a>
                         <hr>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['payment/index']); ?>">

@@ -68,5 +68,9 @@ return [
     'income_status' => [
         0 => '<span class="badge text-bg-warning">Созданно</span>',
         1 => '<span class="badge text-bg-success">Завершен</span>',
+    ],
+    'request_status'=>[
+        0=>'в Оформлении',
+        1=>'Подтвержден'
     ]
 ];
