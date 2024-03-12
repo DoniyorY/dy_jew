@@ -115,6 +115,26 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
         </div>
     </div>
     <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingPays">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseReport" aria-expanded="false" aria-controls="flush-collapseOne">
+                <i class="bi bi-megaphone text-success"></i> Отчёты
+            </button>
+        </h2>
+        <div id="flush-collapseReport" class="accordion-collapse collapse" aria-labelledby="flush-headingPays"
+             data-bs-parent="#accordionClients">
+            <div class="accordion-body">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['report/clients']); ?>">
+                            <i class="bi bi-chevron-right"></i> Отчёты клиентов
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingOne">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -123,16 +143,12 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             </button>
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-             data-bs-parent="#accordionClients">
+             data-bs-parent="#accordionSettings">
             <div class="accordion-body">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['products/index']); ?>"><i
                                 class="bi bi-chevron-right"></i> <?php echo "Товары" ?></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['gold-type/index']); ?>"><i
-                                class="bi bi-chevron-right"></i> <?php echo "Проба" ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page"
