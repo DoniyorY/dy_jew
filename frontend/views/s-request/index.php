@@ -10,7 +10,7 @@ use yii\grid\GridView;
 /** @var common\models\search\SRequestSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Заявки';
+$this->title = 'Список заявок';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="srequest-index">
@@ -41,6 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => function ($data) {
+            if ($data->status == 0) {
+                return ['class' => 'table-secondary'];
+            } else {
+                return ['class' => 'table-success'];
+            }
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -67,7 +74,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, SRequest $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                }
+                },
+                'template' => '{view}'
             ],
         ],
     ]); ?>

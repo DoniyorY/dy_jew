@@ -69,8 +69,12 @@ return [
         0 => '<span class="badge text-bg-warning">Созданно</span>',
         1 => '<span class="badge text-bg-success">Завершен</span>',
     ],
-    'request_status'=>[
-        0=>'в Оформлении',
-        1=>'Подтвержден'
+    'request_status' => [
+        0 => 'в Оформлении',
+        1 => 'Подтвержден'
+    ],
+    'request_status_class' => [
+        0 => 'badge text-bg-secondary',
+        1 => 'badge text-bg-success',
     ]
 ];

@@ -15,8 +15,30 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="srequest-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="row">
+        <div class="col-md-8">
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+        <div class="col-md-4">
+            <?php
+            if ($model->status == 0) {
+                echo Html::a('Принять', ['status', 'id' => $model->id, 'status' => 1], [
+                    'class' => 'btn btn-primary w-100',
+                    'data' => [
+                        'method' => 'post',
+                    ]
+                ]);
+            } else {
+                echo Html::a('Редактировать', ['status', 'id' => $model->id, 'status' => 0], [
+                    'class' => 'btn btn-warning w-100',
+                    'data' => [
+                        'method' => 'post',
+                    ]
+                ]);
+            }
+            ?>
+        </div>
+    </div>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -37,8 +59,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'value' => function ($data) {
-                    return Yii::$app->params['request_status'][$data->status];
-                }
+                    return '<span class="' . Yii::$app->params['request_status_class'][$data->status] . '">' . Yii::$app->params['request_status'][$data->status] . '</span>';
+                },
+                'format'=>'html'
             ],
         ],
     ]) ?>
@@ -55,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="col-md-4">
                         <?= $form->field($new_item, 'product_id')->widget(Select2::className(), [
-                            'data' => \yii\helpers\ArrayHelper::map(\common\models\Warehouse::find()->all(), 'id', 'product_id'),
+                            'data' => \yii\helpers\ArrayHelper::map(\common\models\Warehouse::find()->all(), 'product_id', 'info'),
                             'language' => 'ru',
                             'options' => [
                                 'placeholder' => 'Выберите изделие'
@@ -88,13 +111,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $item->product->info ?></td>
                             <td><?= $item->count ?></td>
                             <td>
-                                <?= Html::a('Удалить', ['delete-item', 'id' => $item->id], [
-                                    'class' => 'btn btn-sm btn-danger',
-                                    'data' => [
-                                        'method' => 'post',
-                                        'conform' => 'Подтвердите действие!',
-                                    ]
-                                ]) ?>
+                                <?php
+                                if ($model->status == 0) {
+                                    echo Html::a('Удалить', ['delete-item', 'id' => $item->id], [
+                                        'class' => 'btn btn-sm btn-danger',
+                                        'data' => [
+                                            'method' => 'post',
+                                            'conform' => 'Подтвердите действие!',
+                                        ]
+                                    ]);
+                                }
+                                ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

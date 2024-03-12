@@ -3,13 +3,13 @@
 namespace frontend\controllers;
 
 use common\models\Products;
-use common\models\SRequest;
 use common\models\search\SRequestSearch;
+use common\models\SRequest;
 use common\models\SRequestItem;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * SRequestController implements the CRUD actions for SRequest model.
@@ -30,6 +30,8 @@ class SRequestController extends Controller
                         'delete' => ['POST'],
                         'create' => ['POST'],
                         'create-item' => ['POST'],
+                        'delete-item' => ['POST'],
+                        'status' => ['post'],
                     ],
                 ],
                 'access' => [
@@ -41,6 +43,8 @@ class SRequestController extends Controller
                                 'index',
                                 'view',
                                 'create-item',
+                                'delete-item',
+                                'status'
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -60,6 +64,7 @@ class SRequestController extends Controller
     {
         $searchModel = new SRequestSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->orderBy(['id' => 3]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -108,7 +113,13 @@ class SRequestController extends Controller
     {
         $model = new SRequestItem();
         if ($model->load(\Yii::$app->request->post())) {
-            $product = Products::findOne(['id' => $model->product_id]);
+            $product = Products::findOne(['id' => $_POST['SRequestItem']['product_id']]);
+            $check = SRequestItem::findOne(['product_id' => $_POST['SRequestItem']['product_id'], 's_request_id' => $id]);
+            if ($check) {
+                $check->count += $model->count;
+                $check->update(false);
+                return $this->redirect(\Yii::$app->request->referrer);
+            }
             $model->s_request_id = $id;
             $model->status = 0;
             $model->created = time();
@@ -117,6 +128,14 @@ class SRequestController extends Controller
             $model->save();
             return $this->redirect(\Yii::$app->request->referrer);
         }
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    public function actionDeleteItem($id)
+    {
+        $model = SRequestItem::findOne(['id' => $id]);
+        $model->delete();
+        \Yii::$app->session->setFlash('success', 'Изделие успешно удалено');
         return $this->redirect(\Yii::$app->request->referrer);
     }
 
@@ -138,6 +157,15 @@ class SRequestController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionStatus($id, $status)
+    {
+        $model = $this->findModel($id);
+        $model->status = $status;
+        $model->update(false);
+        \Yii::$app->session->setFlash('success', 'Статус успешно изменен');
+        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     /**
