@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\GoldType;
 use common\models\search\GoldTypeSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +28,21 @@ class GoldTypeController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => [
+                                'index',
+                                'view',
+                                'delete',
+                                'create',
+                            ],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ]
             ]
         );
     }
