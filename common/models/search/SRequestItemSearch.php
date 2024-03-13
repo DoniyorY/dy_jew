@@ -17,7 +17,7 @@ class SRequestItemSearch extends SRequestItem
     public function rules()
     {
         return [
-            [['id', 's_request_id', 'product_id', 'gold_type_id', 'count', 'status', 'created','client_id'], 'integer'],
+            [['id', 's_request_id', 'product_id', 'gold_type_id', 'count', 'status', 'created'], 'integer'],
             [['content'], 'safe'],
         ];
     }
@@ -40,8 +40,8 @@ class SRequestItemSearch extends SRequestItem
      */
     public function search($params)
     {
-        $query = SRequestItem::find();
-
+        $query = SRequestItem::find()->joinWith('sRequest');
+        $query->andFilterWhere(['s_request.status'=>1]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

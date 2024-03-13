@@ -52,6 +52,7 @@ return [
     'amount_type' => [
         0 => 'UZS',
         1 => 'USD',
+        2 => 'GLD'
     ],
     'payment_method' => [
         0 => 'Наличные',

@@ -18,10 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create S Request Item', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -33,18 +29,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'id',
             's_request_id',
-            'product_id',
-            'gold_type_id',
+            [
+                'attribute' => 'product_id',
+                'value' => function ($data) {
+                    return $data->product->info;
+                }
+            ],
+            [
+                'attribute' => 'gold_type_id',
+                'value' => function ($data) {
+                    return $data->type->name;
+                }
+            ],
             'count',
             //'status',
             //'created',
-            //'content',
-            [
+            'content',
+            /*[
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, SRequestItem $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }
-            ],
+            ],*/
         ],
     ]); ?>
 

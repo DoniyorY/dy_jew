@@ -87,14 +87,24 @@ class ClientController extends Controller
             $model->deleted_time = 0;
             $model->method_id = 0;
             $model->amount_type = $post['amount_type'];
-            if ($post['amount_type'] == 1) {
-                $model->content = $model->content . "( Приём оплаты в USD " . $post['amount'] . ' )';
-                $total = $post['amount'] * $post['rate_amount'];
-                $model->amount = $total;
+            if ($post['amount_type'] != 0) {
+
+                if ($post['amount_type'] == 2) {
+                    $model->content = $model->content . "( Приём оплаты в GLD " . $post['gld_weight'] . ' )';
+                    $total = $post['amount'] * $post['gld_weight'];
+                    $model->amount = $total;
+                } else {
+                    $model->content = $model->content . "( Приём оплаты в USD " . $post['amount'] . ' гр)';
+                    $total = $post['amount'] * $post['rate_amount'];
+                    $model->amount = $total;
+                }
                 $curr = CurrencyRate::findOne(['status' => 0]);
-                $curr->status = 1;
-                $curr->updated = time();
-                $curr->update(false);
+                if ($curr) {
+                    $curr->status = 1;
+                    $curr->updated = time();
+                    $curr->update(false);
+                }
+
                 $new_curr = new CurrencyRate();
                 $new_curr->created = time();
                 $new_curr->amount = $post['rate_amount'];

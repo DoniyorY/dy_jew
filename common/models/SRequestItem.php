@@ -57,7 +57,18 @@ class SRequestItem extends \yii\db\ActiveRecord
 
     public function getProduct()
     {
-        return $this->hasOne(Products::className(),['id'=>'product_id']);
+        return $this->hasOne(Products::className(), ['id' => 'product_id']);
+    }
+
+    public function getSRequest()
+    {
+        return $this->hasOne(SRequest::className(), ['id' => 's_request_id']);
+
+    }
+
+    public function getType()
+    {
+        return $this->hasOne(GoldType::className(), ['id' => 'product_id']);
     }
 
 }

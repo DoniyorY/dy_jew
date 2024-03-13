@@ -113,7 +113,7 @@ class SRequestController extends Controller
         $searchModel = new SRequestItemSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        return $this->render('index', [
+        return $this->render('index_items', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
