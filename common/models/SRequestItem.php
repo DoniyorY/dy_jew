@@ -14,6 +14,7 @@ use Yii;
  * @property int|null $count
  * @property int|null $status
  * @property int|null $created
+ * @property int|null $client_id
  * @property string|null $content
  */
 class SRequestItem extends \yii\db\ActiveRecord

@@ -2,9 +2,7 @@
 $lang = yii::$app->language;
 
 use yii\helpers\Url;
-use yii\helpers\Html;
 use common\widgets\Alert;
-use cinghie\multilanguage\widgets\MultiLanguageWidget;
 
 ?>
 
@@ -23,7 +21,11 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             <td><?php echo "Курс"; ?></td>
             <td><?php
                 $rate = \common\models\CurrencyRate::findOne(['status' => 0]);
-                echo Yii::$app->formatter->asDecimal($rate->amount, 0) . ' UZS';
+                if ($rate) {
+                    echo Yii::$app->formatter->asDecimal($rate->amount, 0) . ' UZS';
+                }else{
+                    echo 0;
+                }
                 ?></td>
         </tr>
     </table>
@@ -67,11 +69,18 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
             <div class="accordion-body">
                 <ul class="nav flex-column">
                     <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['s-request/index']); ?>">
+                            <i class="bi bi-chevron-right"></i> Список Заявок
+                        </a>
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['s-request/index-items']); ?>">
+                            <i class="bi bi-chevron-right"></i> Список Изделий
+                        </a>
+                        <hr>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/create']); ?>">
                             <i class="bi bi-chevron-right"></i> Новые Заказы
                         </a>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/index']); ?>">
-                            <i class="bi bi-chevron-right"></i> Список заявок
+                            <i class="bi bi-chevron-right"></i> Список Заказов
                         </a>
                     </li>
                 </ul>
