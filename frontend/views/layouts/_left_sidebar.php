@@ -2,9 +2,7 @@
 $lang = yii::$app->language;
 
 use yii\helpers\Url;
-use yii\helpers\Html;
 use common\widgets\Alert;
-use cinghie\multilanguage\widgets\MultiLanguageWidget;
 
 ?>
 
@@ -80,7 +78,7 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
                             <i class="bi bi-chevron-right"></i> Новые Заказы
                         </a>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/index']); ?>">
-                            <i class="bi bi-chevron-right"></i> Список заказы
+                            <i class="bi bi-chevron-right"></i> Список заказов
                         </a>
                         <hr>
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['payment/index']); ?>">
@@ -150,7 +148,7 @@ use cinghie\multilanguage\widgets\MultiLanguageWidget;
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['products/index']); ?>"><i
                                 class="bi bi-chevron-right"></i> <?php echo "Товары" ?></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item d-none">
                         <a class="nav-link" aria-current="page"
                            href="<?php echo Url::to(['currency-rate/index']); ?>"><i
                                 class="bi bi-chevron-right"></i> <?php echo "Курс" ?></a>

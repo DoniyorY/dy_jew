@@ -1,15 +1,19 @@
 <?php
 
+use common\models\IncomeItem;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var common\models\Income $model */
+/** @var common\models\IncomeItem $items */
 
 $this->title = 'Приход № ' . $model->id . " от " . date('d.m.Y', $model->created);
 $this->params['breadcrumbs'][] = ['label' => 'Приходы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+YiiAsset::register($this);
 ?>
 <div class="income-view">
     <div class="row">
@@ -39,38 +43,41 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            [
-                'attribute' => 'created',
-                'value' => function ($data) {
-                    return date('d.m.Y', $data->created);
-                }
+    <?php try {
+        DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                [
+                    'attribute' => 'created',
+                    'value' => function ($data) {
+                        return date('d.m.Y', $data->created);
+                    }
+                ],
+                [
+                    'attribute' => 'user_id',
+                    'value' => function ($data) {
+                        return $data->user->fullname;
+                    }
+                ],
+                [
+                    'attribute' => 'status',
+                    'value' => function ($data) {
+                        return Yii::$app->params['income_status'][$data->status];
+                    },
+                    'format' => 'html'
+                ],
+                //'total_amount',
             ],
-            [
-                'attribute' => 'user_id',
-                'value' => function ($data) {
-                    return $data->user->fullname;
-                }
-            ],
-            [
-                'attribute' => 'status',
-                'value' => function ($data) {
-                    return Yii::$app->params['income_status'][$data->status];
-                },
-                'format'=>'html'
-            ],
-            //'total_amount',
-        ],
-    ]) ?>
+        ]);
+    } catch (Throwable $e) {
+    } ?>
     <hr>
     <div class="row">
         <div class="col-md-12">
             <h2>Изделия</h2>
         </div>
         <div class="col-md-12">
-            <?= $this->render('_form_item', ['model' => new \common\models\IncomeItem(), 'income_id' => $model->id]) ?>
+            <?= $this->render('_form_item', ['model' => new IncomeItem(), 'income_id' => $model->id]) ?>
         </div>
         <div class="col-md-12 mt-3">
             <table class="table table-sm table-bordered table-striped text-center">
@@ -89,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?= $item->count ?></td>
                         <td>
                             <?php if ($model->status == 0): ?>
-                                <a href="<?= \yii\helpers\Url::to(['delete-item', 'id' => $item->id]) ?>"
+                                <a href="<?= Url::to(['delete-item', 'id' => $item->id]) ?>"
                                    class="btn btn-danger btn-sm" data-method="post" data-confirm="Подтвердите действие">
                                     <i class="bi bi-trash"></i>
                                 </a>
