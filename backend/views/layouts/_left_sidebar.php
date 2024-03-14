@@ -23,7 +23,7 @@ use common\widgets\Alert;
                 $rate = \common\models\CurrencyRate::findOne(['status' => 0]);
                 if ($rate) {
                     echo Yii::$app->formatter->asDecimal($rate->amount, 0) . ' UZS';
-                }else{
+                } else {
                     echo 0;
                 }
                 ?></td>
@@ -72,7 +72,8 @@ use common\widgets\Alert;
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['s-request/index']); ?>">
                             <i class="bi bi-chevron-right"></i> Список Заявок
                         </a>
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['s-request/index-items']); ?>">
+                        <a class="nav-link" aria-current="page"
+                           href="<?php echo Url::to(['s-request/index-items']); ?>">
                             <i class="bi bi-chevron-right"></i> Список Изделий
                         </a>
                         <hr>

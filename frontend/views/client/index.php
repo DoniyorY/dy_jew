@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
 /** @var common\models\search\ClientsSearch $searchModel */
@@ -14,6 +15,9 @@ $this->title = 'Клиенты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clients-index">
+    <?php
+    Pjax::begin()
+    ?>
     <div class="row">
         <div class="col-6">
             <h1><?= Html::encode($this->title) ?></h1>
@@ -33,7 +37,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+        'pager' => [
+            'prevPageLabel' => '<span class="page-item">Пред</span>',
+            'nextPageLabel' => '<span class="page-item">След</span>',
+            'disabledPageCssClass' => 'page-link',
+            'activePageCssClass' => 'page-item active',
+            'maxButtonCount' => 5,
+            'linkOptions' => ['class' => 'page-link'],
+            'options' => [
+                'tag' => 'ul',
+                'class' => 'pagination',
+                'style' => 'margin-left: 1px;'
+            ],
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -78,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template'=>'{view}'
             ],
         ],
-    ]); ?>
+    ]); Pjax::end() ?>
 
 
 </div>

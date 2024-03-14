@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
             <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary w-100']) ?>
         </div>
         <div class="col-md-2 mt-3">
-            <?= Html::resetButton('Сбросить', ['class' => 'btn btn-outline-secondary w-100']) ?>
+            <?= Html::a('Сбросить',['index'], ['class' => 'btn btn-outline-secondary w-100']) ?>
         </div>
     </div>
 

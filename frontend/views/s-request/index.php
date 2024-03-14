@@ -41,6 +41,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pager' => [
+            'prevPageLabel' => '<span class="page-item">Пред</span>',
+            'nextPageLabel' => '<span class="page-item">След</span>',
+            'disabledPageCssClass' => 'page-link',
+            'activePageCssClass' => 'page-item active',
+            'maxButtonCount' => 5,
+            'linkOptions' => ['class' => 'page-link'],
+            'options' => [
+                'tag' => 'ul',
+                'class' => 'pagination',
+                'style' => 'margin-left: 1px;'
+            ],
+        ],
         'rowOptions' => function ($data) {
             if ($data->status == 0) {
                 return ['class' => 'table-secondary'];
