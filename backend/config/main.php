@@ -12,12 +12,12 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
-    'name'=>'CRM JEW',
-    'language'=>'ru',
+    'name' => 'CRM JEW',
+    'language' => 'ru',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl'=>'',
+            'baseUrl' => '',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -45,6 +45,26 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => 'site/index',
+                'warehouse' => 'warehouse/index',
+                'income' => 'income/index',
+                'income/<id>' => 'income/view',
+                'new-income' => 'income/create',
+                'income/status/<id>&<status>' => 'income/status',
+                'income/delete/<id>' => 'income/delete',
+                'request' => 's-request/index',
+                'request/<id>' => 's-request/view',
+                'request/status/<id>&<status>' => 's-request/status',
+                'request/items' => 's-request/index-items',
+                'sales' => 'sale/index',
+                'sale/<id>' => 'sale/view',
+                'new-sale' => 'sale/create',
+                'client' => 'client/index',
+                'client/<id>' => 'client/view',
+                'products' => 'products/index',
+                'gold-type' => 'gold-type/index',
+                'rate' => 'currency-rate/index',
+                'user' => 'user/index'
             ],
         ],
 
