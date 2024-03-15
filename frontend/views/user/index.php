@@ -87,9 +87,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'value' => function ($data) {
+                    ($data->id == Yii::$app->user->id) ? $class = 'disabled' : $class = '';
                     if ($data->status == 10) {
                         return Html::a(Yii::$app->params['user_status'][$data->status], ['status', 'id' => $data->id, 'status' => 9], [
-                            'class' => 'btn btn-success w-100 btn-sm',
+                            'class' => "$class btn btn-success w-100 btn-sm",
                             'data' => [
                                 'method' => 'post',
                                 'confirm' => 'Подтвердите действие!!!',
@@ -97,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     } else {
                         return Html::a(Yii::$app->params['user_status'][$data->status], ['status', 'id' => $data->id, 'status' => 10], [
-                            'class' => 'btn btn-danger w-100 btn-sm',
+                            'class' => "$class btn btn-danger w-100 btn-sm",
                             'data' => [
                                 'method' => 'post',
                                 'confirm' => 'Подтвердите действие!!!',
@@ -110,12 +111,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'updated_at',
             //'verification_token',
-            /*[
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                }
-            ],*/
+                },
+                'template' => '{view}'
+            ],
         ],
     ]); ?>
 

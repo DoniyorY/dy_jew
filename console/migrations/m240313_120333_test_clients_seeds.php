@@ -17,7 +17,7 @@ class m240313_120333_test_clients_seeds extends Migration
 
         for ($i = 1; $i <= 50; $i++) {
             $this->insert('client', [
-                'id'=>$i+1,
+                'id' => $i + 1,
                 'fullname' => $faker->name,
                 'phone' => $faker->phoneNumber,
                 'address' => $faker->address,
@@ -39,8 +39,8 @@ class m240313_120333_test_clients_seeds extends Migration
      */
     public function safeDown()
     {
-        $model=\common\models\Clients::find()->orderBy(['id'=>3])->limit(50)->all();
-        foreach ($model as $item){
+        $model = \common\models\Clients::find()->orderBy(['id' => 3])->limit(50)->all();
+        foreach ($model as $item) {
             $item->delete();
         }
         return true;

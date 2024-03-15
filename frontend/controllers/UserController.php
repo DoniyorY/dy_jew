@@ -27,6 +27,7 @@ class UserController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                        'reset-pass' => ['post']
                     ],
                 ],
                 'access' => [
@@ -37,6 +38,8 @@ class UserController extends Controller
                                 'create',
                                 'index',
                                 'status',
+                                'view',
+                                'reset-pass'
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -69,6 +72,16 @@ class UserController extends Controller
         $model->status = $status;
         $model->updated_at = time();
         $model->update();
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
+    public function actionResetPass($id)
+    {
+        $model = $this->findModel($id);
+        $model->password_hash = \Yii::$app->security->generatePasswordHash(\Yii::$app->params['reset_pass']);
+        $model->updated_at = time();
+        $model->update();
+        \Yii::$app->session->setFlash('success', 'Пароль успешно изменен!');
         return $this->redirect(\Yii::$app->request->referrer);
     }
 

@@ -7,6 +7,7 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'user.passwordMinLength' => 6,
     'bsVersion' => '5.x',
+    'reset_pass'=>'123456',
 
     'rate_status' => [
         0 => 'Нынешний курс',
