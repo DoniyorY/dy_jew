@@ -7,7 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 ?>
-<?php $form = ActiveForm::begin(['action' => Url::to(['create-item']),'method'=>'post']); ?>
+<?php $form = ActiveForm::begin(['action' => Url::to(['/new-product']),'method'=>'post']); ?>
 <?= $form->field($model, 'sale_id')->textInput(['hidden' => true, 'value' => $sale_id])->label(false) ?>
 <div class="row">
     <div class="col-md-3">
@@ -33,7 +33,29 @@ use yii\helpers\Url;
     </div>
 </div>
 
-<?php ActiveForm::end() ?>
+<?php ActiveForm::end();
+
+
+$js = <<<JS
+    $('form').on('beforeSubmit', function(){
+        var data = $(this).serialize();
+        $.ajax({
+            url: '/new-product',
+            type: 'post',
+            data: data,
+            success: function(res){
+                console.log(res);
+            },
+            error: function(jqXHR, errMsg) {
+            alert(errMsg);
+        }
+        });
+        return false;
+    });
+JS;
+
+//$this->registerJs($js);
+?>
 <script>
     let weight = document.getElementById('saleitem-weight')
     let price = document.getElementById('saleitem-price')

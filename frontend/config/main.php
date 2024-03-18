@@ -52,6 +52,7 @@ return [
                 'new-sale'=>'sale/create',
                 'sales'=>'sale/index',
                 'sale/<id>'=>'sale/view',
+                'new-product'=>'sale/create-item',
                 'payment'=>'payment/index',
                 'new-client'=>'client/create',
                 'client'=>'client/index',
@@ -60,7 +61,8 @@ return [
                 'products'=>'products/index',
                 'users'=>'user/index',
                 'user/<id>'=>'user/view',
-
+                'delete-product/<id>'=>'sale/delete-item',
+                'sale/status/<id>&<status>'=>'sale/status',
             ],
         ],
 

@@ -7,11 +7,13 @@ use common\models\Sale;
 use common\models\SaleItem;
 use common\models\Warehouse;
 use common\models\search\SaleSearch;
+use yii\data\ActiveDataProvider;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\widgets\ActiveForm;
 
 /**
  * SaleController implements the CRUD actions for Sale model.
@@ -104,13 +106,14 @@ class SaleController extends Controller
     public function actionCreateItem()
     {
         $model = new SaleItem();
-        if ($model->load(\Yii::$app->request->post())) {
-            $model->created = time();
-            $model->status = 0;
-            $model->count = 1;
-            $model->save(false);
-            return $this->redirect(\Yii::$app->request->referrer);
-
+        if ($this->request->isPost) {
+            if ($model->load(\Yii::$app->request->post())) {
+                $model->created = time();
+                $model->status = 0;
+                $model->count = 1;
+                $model->save(false);
+                return $this->redirect(\Yii::$app->request->referrer);
+            }
         }
     }
 
@@ -129,7 +132,13 @@ class SaleController extends Controller
             $model->status = 1;
             $model->update(false);
         }
-        $items = SaleItem::findAll(['sale_id' => $model->id]);
+        //$items = SaleItem::findAll(['sale_id' => $model->id]);
+
+        $items = new ActiveDataProvider([
+            'query' => SaleItem::find()->where(['sale_id' => $model->id])
+        ]);
+
+
         return $this->render('view', [
             'model' => $model,
             'items' => $items,

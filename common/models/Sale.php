@@ -97,4 +97,14 @@ class Sale extends \yii\db\ActiveRecord
         $this->save(false);
         return true;
     }
+    public static function getTotalCount($dataProvider, $fieldName)
+    {
+        $totalBalance = 0;
+
+        foreach ($dataProvider->models as $item) {
+            $totalBalance += ($item[$fieldName]) ? $item[$fieldName] : 0;
+        }
+
+        return yii::$app->formatter->asDecimal($totalBalance, 0);
+    }
 }

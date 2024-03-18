@@ -18,6 +18,7 @@ class m240306_113045_sale_item extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
     $this->createTable('sale_item',[
+        'id'=>$this->primaryKey(),
         'sale_id'=>$this->integer()->notNull(),
         'product_id'=>$this->integer()->notNull(),
         'price'=>$this->integer()->notNull(),
