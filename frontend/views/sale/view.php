@@ -22,9 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-8 text-end">
             <div class="btn-group">
-                <?php
-                if ($model->status == 1):
-                    ?>
+                <?php if ($model->status == 1): ?>
                     <a href="<?= Url::to(['status', 'id' => $model->token, 'status' => 2]) ?>" class="btn btn-success"
                        data-method="post" data-confirm="Подтвердите действие!!!">
                         Активный
