@@ -122,8 +122,8 @@ class SaleController extends Controller
      */
     public function actionView($id)
     {
-     $today_start=strtotime('today');
-     $today_end=$today_start+86399;
+        $today_start = strtotime('today');
+        $today_end = $today_start + 86399;
         $model = $this->findModel($id);
         if ($model->status == 0) {
             $model->status = 1;
@@ -133,8 +133,8 @@ class SaleController extends Controller
         return $this->render('view', [
             'model' => $model,
             'items' => $items,
-            'today_start'=>$today_start,
-            'today_end'=>$today_end,
+            'today_start' => $today_start,
+            'today_end' => $today_end,
         ]);
     }
 
@@ -200,8 +200,8 @@ class SaleController extends Controller
         $model = new Sale();
 
         if ($this->request->isPost) {
-            if (\Yii::$app->request->post()) {
-                $model->createSale($id);
+
+            if (\Yii::$app->request->post() and $model->createSale(($id) ? $id : $_POST['Sale']['client_id'])) {
                 return $this->redirect(['view', 'id' => $model->token]);
             }
         } else {

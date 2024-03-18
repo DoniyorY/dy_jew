@@ -37,7 +37,7 @@ class Sale extends \yii\db\ActiveRecord
     {
         return [
             [['created', 'client_id', 'total_amount', 'status', 'token', 'content'], 'required'],
-            [['created', 'client_id', 'total_amount', 'status', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
+            [['created', 'total_amount', 'status', 'is_deleted', 'deleted_user_id', 'deleted_time'], 'integer'],
             [['token'], 'string', 'max' => 6],
             [['content'], 'string', 'max' => 255],
         ];
@@ -78,20 +78,23 @@ class Sale extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'deleted_user_id']);
     }
 
-    public function createSale($id = null)
+    public function createSale($token)
     {
-        if ($id) {
-            $client = Clients::findOne(['token' => $id]);
+        if ($token) {
+            $client = Clients::findOne(['token' => $token]);
             $this->client_id = $client->id;
         }
         $this->created = time();
-        $this->content = '-';
+        //$this->content = '-';
         $this->updated = time();
         $this->user_id = \Yii::$app->user->id;
         $this->total_amount = 0;
         $this->token = \Yii::$app->security->generateRandomString(6);
         $this->status = 0;
-        $this->save();
+        $this->is_deleted=0;
+        $this->deleted_user_id=0;
+        $this->deleted_time=0;
+        $this->save(false);
         return true;
     }
 }

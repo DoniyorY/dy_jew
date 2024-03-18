@@ -51,7 +51,7 @@ return [
                 'request/<id>'=>'s-request/view',
                 'new-sale'=>'sale/create',
                 'sales'=>'sale/index',
-                'sale/<id>'=>'sale-view',
+                'sale/<id>'=>'sale/view',
                 'payment'=>'payment/index',
                 'new-client'=>'client/create',
                 'client'=>'client/index',
