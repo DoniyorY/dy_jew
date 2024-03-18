@@ -12,7 +12,6 @@ $this->title = $model->fullname;
 $this->params['breadcrumbs'][] = ['label' => 'Клиенты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
-$balance_btn_class=($model->balance<0)?"btn-warning":"btn-success"
 ?>
 <div class="clients-view">
     <div class="row">
@@ -20,7 +19,7 @@ $balance_btn_class=($model->balance<0)?"btn-warning":"btn-success"
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
         <div class="col-md-4 text-center mt-2">
-            <button type="button" class="btn <?=$balance_btn_class?> w-100" data-bs-toggle="modal"
+            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
                     data-bs-target="#clientBalanceModal">
                 <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?> UZS
             </button>

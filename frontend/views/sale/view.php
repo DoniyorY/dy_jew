@@ -1,8 +1,6 @@
 <?php
 
 use common\models\SaleItem;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
@@ -36,14 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     </a>
                 <?php endif; ?>
                 <?php if ($model->status == 2): ?>
-                    <?php if ($model->created > $today_start and $model->created < $today_end): ?>
+                    <?php if ($model->created > $today_start and $model->created < $today_end):?>
                         <a href="<?= Url::to(['status', 'id' => $model->token, 'status' => 1]) ?>"
                            class="btn btn-warning" data-method="post" data-confirm="Подтвердите действие">
                             <i class="bi bi-arrow-return-left"></i> Назад
                         </a>
                     <?php endif; ?>
-                    <a href="<?= Url::to(['delete', 'id' => $model->token]) ?>" class="btn btn-danger"
-                       data-confirm="Подтвердите действие!!!" data-method="post">
+                    <a href="<?= Url::to(['delete', 'id' => $model->token]) ?>" class="btn btn-danger" data-confirm="Подтвердите действие!!!" data-method="post">
                         <i class="bi bi-trash"></i> Удалить
                     </a>
                 <?php endif; ?>
@@ -91,105 +88,54 @@ $this->params['breadcrumbs'][] = $this->title;
                         echo "<hr class=\"mt-4\">";
                     } ?>
                 </div>
-                <?= GridView::widget([
-                    'dataProvider' => $items,
-                    'tableOptions' => [
-                        'class' => 'table-sm text-center table table-bordered table-striped'
-                    ],
-                    'headerRowOptions' => [
-                        'class' => 'table-warning',
 
-                    ],
-                    'footerRowOptions' => [
-                        'class' => 'table-dark'
-                    ],
-                    'showFooter' => true,
-                    'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-                        [
-                            'attribute' => 'product_id',
-                            'value' => function ($v) {
-                                return $v->product->info;
-                            }
-                        ],
-                        [
-                            'attribute' => 'price',
-                            'value' => function ($v) {
-                                return Yii::$app->formatter->asDecimal($v->price, 0);
-                            },
-                            'footer' => 'Итого:'
-                        ],
-                        [
-                            'attribute' => 'weight',
-                            'value' => function ($v) {
-                                return $v->weight;
-                            },
-                            'footer' => \common\models\Sale::getTotalCount($items, 'weight') . ' гр'
-                        ],
-                        [
-                            'attribute' => 'total_price',
-                            'value' => function ($v) {
-                                return Yii::$app->formatter->asDecimal($v->total_price, 0);
-                            },
-                            'footer' => \common\models\Sale::getTotalCount($items, 'total_price')
-                        ],
-                        [
-                            'class' => ActionColumn::className(),
-                            'urlCreator' => function ($action, $model) {
-                                return Url::toRoute([Url::to(['delete-item']), 'id' => $model->id]);
-                            },
-                            'template' => '{delete}'
-                        ],
-                    ]
-                ]) ?>
+                <div class="col-md-12">
+                    <table class="table table-sm table-bordered table-striped text-center">
+                        <thead>
+                        <tr class="table-primary">
+                            <th>#</th>
+                            <th>Изделие</th>
+                            <th>Цена за грамм</th>
+                            <th>Вес</th>
+                            <th>Итоговая сумма</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php $i = 1;
+                        $total_weight = 0;
+                        $total_price = 0;
+                        foreach ($items as $item):?>
+                            <tr>
+                                <td><?= $i ?></td>
+                                <td><?= $item->product->info ?></td>
+                                <td><?= Yii::$app->formatter->asDecimal($item->price, 0) ?> UZS</td>
+                                <td><?= $item->weight ?> гр</td>
+                                <td><?= Yii::$app->formatter->asDecimal($item->total_price, 0) ?> UZS</td>
+                                <td>
+                                    <?php if ($model->status == 0 or $model->status == 1) {
+                                        echo Html::a('<i class="bi bi-trash"></i>', ['delete-item', 'id' => $item->id], ['class' => 'btn btn-sm btn-danger', 'data' => [
+                                            'method' => 'post',
+                                            'confirm' => 'Подтвердите действие!!!'
+                                        ]]);
+                                    } ?>
+                                </td>
+                            </tr>
+                            <?php $total_weight += $item->weight;
+                            $total_price += $item->total_price;
+                            $i++; endforeach; ?>
+                        <tr class="table-dark">
+                            <th></th>
+                            <th></th>
+                            <th>Итого:</th>
+                            <th><?= $total_weight ?> гр</th>
+                            <th><?= Yii::$app->formatter->asDecimal($total_price, 0) ?> UZS</th>
+                            <th></th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<!--<div class="col-md-12">
-    <table class="table table-sm table-bordered table-striped text-center">
-        <thead>
-        <tr class="table-primary">
-            <th>#</th>
-            <th>Изделие</th>
-            <th>Цена за грамм</th>
-            <th>Вес</th>
-            <th>Итоговая сумма</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php /*$i = 1;
-        $total_weight = 0;
-        $total_price = 0;
-        foreach ($items as $item):*/ ?>
-            <tr>
-                <td><?php /*= $i */ ?></td>
-                <td><?php /*= $item->product->info */ ?></td>
-                <td><?php /*= Yii::$app->formatter->asDecimal($item->price, 0) */ ?> UZS</td>
-                <td><?php /*= $item->weight */ ?> гр</td>
-                <td><?php /*= Yii::$app->formatter->asDecimal($item->total_price, 0) */ ?> UZS</td>
-                <td>
-                    <?php /*if ($model->status == 0 or $model->status == 1) {
-                        echo Html::a('<i class="bi bi-trash"></i>', ['delete-item', 'id' => $item->id], ['class' => 'btn btn-sm btn-danger', 'data' => [
-                            'method' => 'post',
-                            'confirm' => 'Подтвердите действие!!!'
-                        ]]);
-                    } */ ?>
-                </td>
-            </tr>
-            <?php /*$total_weight += $item->weight;
-            $total_price += $item->total_price;
-            $i++; endforeach; */ ?>
-        <tr class="table-dark">
-            <th></th>
-            <th></th>
-            <th>Итого:</th>
-            <th><?php /*= $total_weight */ ?> гр</th>
-            <th><?php /*= Yii::$app->formatter->asDecimal($total_price, 0) */ ?> UZS</th>
-            <th></th>
-        </tr>
-        </tbody>
-    </table>
-</div>-->
