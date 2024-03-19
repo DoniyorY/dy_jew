@@ -76,11 +76,11 @@ use common\widgets\Alert;
                            href="<?php echo Url::to(['s-request/index-items']); ?>">
                             <i class="bi bi-chevron-right"></i> Список Изделий
                         </a>
-                        <hr>
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/create']); ?>">
+
+                        <a class="nav-link d-none" aria-current="page" href="<?php echo Url::to(['sale/create']); ?>">
                             <i class="bi bi-chevron-right"></i> Новые Заказы
                         </a>
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['sale/index']); ?>">
+                        <a class="nav-link d-none" aria-current="page" href="<?php echo Url::to(['sale/index']); ?>">
                             <i class="bi bi-chevron-right"></i> Список Заказов
                         </a>
                     </li>

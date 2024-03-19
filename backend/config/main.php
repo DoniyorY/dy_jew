@@ -17,7 +17,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
-            'baseUrl' => '',
+            'baseUrl' => '/admin',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -55,7 +55,7 @@ return [
                 'request' => 's-request/index',
                 'request/<id>' => 's-request/view',
                 'request/status/<id>&<status>' => 's-request/status',
-                'request/items' => 's-request/index-items',
+                'r-items' => 's-request/index-items',
                 'sales' => 'sale/index',
                 'sale/<id>' => 'sale/view',
                 'new-sale' => 'sale/create',
