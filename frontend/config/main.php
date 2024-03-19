@@ -60,7 +60,7 @@ return [
                 'products'=>'products/index',
                 'users'=>'user/index',
                 'user/<id>'=>'user/view',
-
+                'sale/delete/<id>'=>'sale/delete'
             ],
         ],
 
