@@ -1,15 +1,10 @@
 <?php
-/** @var yii\web\View $this */
-/** @var common\models\search\ProductsSearch $searchModel */
+$this->title = 'Акт сверка клиента:' . $client->fullname;
 
-/** @var yii\data\ActiveDataProvider $dataProvider */
-
-use yii\helpers\Html;
 use yii\helpers\Url;
-
-$this->title = 'Отчёты клиентов';
-$this->params['breadcrumbs'][] = $this->title;
+use yii\helpers\Html;
 ?>
+
 <div class="row">
     <div class="col-md-8">
         <h1><?= $this->title ?></h1>
@@ -20,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-search"></i> Поиск
             </button>
-            <button type="button" onclick="PrintElem('print-clients')" class="btn btn-primary"><i
+            <button type="button" onclick="PrintElem('print-client-sales')" class="btn btn-primary"><i
                         class="bi bi-printer"></i> Распечатать
             </button>
         </div>
@@ -28,40 +23,41 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-12">
         <div class="collapse" id="collapseExample">
             <div class="card card-body">
-                <?= $this->render('search/_client_search') ?>
+                <?= $this->render('search/_client_sales') ?>
             </div>
         </div>
     </div>
-    <div class="col-md-12 mt-2" id="print-clients">
-        <table class="table table-sm table-bordered table-striped text-center" style="border-collapse: collapse">
+    <div class="col-md-12 mt-2" id="print-client-sales">
+        <table class="table-sm table-bordered table table-striped text-center" style="border-collapse: collapse">
             <thead>
             <tr>
                 <th>#</th>
-                <th>Клиент</th>
-                <th>Номер телефона</th>
-                <th>Баланс</th>
+                <th>Дата создания</th>
+                <th>Изделия</th>
+                <th>Вес</th>
+                <th>Цена за грамм</th>
+                <th>Итого</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <?php $i = 1;
-            foreach ($model as $c): ($c->balance >= 0) ? $class = '' : $class = 'table-danger' ?>
-                <tr class="<?= $class ?>">
+            foreach ($model as $v): ?>
+                <tr>
                     <td><?= $i++ ?></td>
-                    <td><?= $c->fullname ?></td>
-                    <td><?= $c->phone ?></td>
-                    <td><?= Yii::$app->formatter->asDecimal($c->balance, 0) ?></td>
-                    <td>
-                        <a class="btn btn-sm btn-primary" href="<?= Url::to(['client-items', 'id' => $c->token]) ?>">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </td>
+                    <td><?= date('d.m.Y', $v->created) ?></td>
+                    <td><?= $v->product->info ?></td>
+                    <td><?= $v->weight ?></td>
+                    <td><?= Yii::$app->formatter->asDecimal($v->price, 0) ?></td>
+                    <td><?= Yii::$app->formatter->asDecimal($v->total_price, 0) ?></td>
+                    <td></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </div>
+
 <script>
     function PrintElem(elem) {
         var mywindow = window.open('', '<?=Html::encode($this->title)?>', 'height=1000,width=1000');

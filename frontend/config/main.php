@@ -43,7 +43,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-               /* ''=>'site/index',
+                ''=>'site/index',
                 'warehouse'=>'warehouse/index',
                 'income'=>'income/index',
                 'income/<id>'=>'income/view',
@@ -59,7 +59,8 @@ return [
                 'client/update/<id>'=>'client/update',
                 'products'=>'products/index',
                 'users'=>'user/index',
-                'user/<id>'=>'user/view',*/
+                'user/<id>'=>'user/view',
+
             ],
         ],
 

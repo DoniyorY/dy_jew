@@ -7,6 +7,7 @@ use common\models\search\SRequestItemSearch;
 use common\models\search\SRequestSearch;
 use common\models\SRequest;
 use common\models\SRequestItem;
+use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -120,12 +121,17 @@ class SRequestController extends Controller
         ]);
     }
 
+    /**
+     * @throws \Throwable
+     * @throws StaleObjectException
+     */
     public function actionCreateItem($id)
     {
         $model = new SRequestItem();
         if ($model->load(\Yii::$app->request->post())) {
-            $product = Products::findOne(['id' => $_POST['SRequestItem']['product_id']]);
-            $check = SRequestItem::findOne(['product_id' => $_POST['SRequestItem']['product_id'], 's_request_id' => $id]);
+            $post = $_POST['SRequestItem'];
+            $product = Products::findOne(['id' => $post['product_id']]);
+            $check = SRequestItem::findOne(['product_id' => $post['product_id'], 's_request_id' => $id]);
             if ($check) {
                 $check->count += $model->count;
                 $check->update(false);

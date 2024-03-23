@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
     <div class="row">
 
         <?= $form->field($model, 'client_id')->widget(Select2::classname(), [
-            'data' => \yii\helpers\ArrayHelper::map(\common\models\Clients::findAll(['is_deleted'=>0]),'id','fullname'),
+            'data' => \yii\helpers\ArrayHelper::map(\common\models\Clients::findAll(['is_deleted'=>0]),'token','fullname'),
             'language' => 'ru',
             'options' => ['placeholder' => 'Выберите клиента'],
             'pluginOptions' => [
