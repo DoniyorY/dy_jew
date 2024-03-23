@@ -155,6 +155,7 @@ class ClientController extends Controller
             if ($model->load($this->request->post())) {
                 $model->status = 0;
                 $model->created = time();
+                $model->is_deleted=0;
                 $model->updated = time();
                 $model->token = \Yii::$app->security->generateRandomString(6);
                 $model->save();

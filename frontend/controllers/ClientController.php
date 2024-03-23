@@ -48,6 +48,7 @@ class ClientController extends Controller
                                 'delete-phone',
                                 'update',
                                 'make-payment',
+                                'token'
                             ],
                             'allow' => true,
                             'roles' => ['@'],
@@ -73,7 +74,21 @@ class ClientController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionToken()
+    {
+        $data = ['grant_type' => 'client_credentials'];
+        $url = 'https://partner.atmos.uz/token';
 
+        $base64 = base64_encode('172fYvQ8WFgBTApUTzfHa56Wfwga:ZZY5BKwzgDFbyHqwbhFE0_QHuTYa');
+        $client = new \yii\httpclient\Client();
+        $response = $client->post($url, $data, [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Authorization' => "Basic $base64",
+            'Host' => 'partner.atmos.uz',
+            'Content-Length' => 29
+        ])->send();
+        return $response->data['access_token'];
+    }
     public function actionMakePayment()
     {
         $model = new Payment();

@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-4 text-center mt-2">
             <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
                     data-bs-target="#clientBalanceModal">
-                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?> UZS
+                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?> GLD
             </button>
         </div>
         <div class="col-md-4 text-end mt-2">
@@ -366,7 +366,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="clientBalanceModalLabel">Пополнить баланс</h1>
+                    <h1 class="modal-title fs-5" id="clientBalanceModalLabel">Принять оплату</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

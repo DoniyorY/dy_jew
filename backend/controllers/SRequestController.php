@@ -106,6 +106,7 @@ class SRequestController extends Controller
         } else {
             return $this->redirect(\Yii::$app->request->referrer);
         }
+        return $this->redirect(\Yii::$app->request->referrer);
     }
 
     public function actionIndexItems()
