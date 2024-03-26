@@ -69,11 +69,13 @@ class ClientController extends Controller
         $searchModel = new ClientsSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
     public function actionToken()
     {
         $data = ['grant_type' => 'client_credentials'];
@@ -89,6 +91,7 @@ class ClientController extends Controller
         ])->send();
         return $response->data['access_token'];
     }
+
     public function actionMakePayment()
     {
         $model = new Payment();
@@ -102,34 +105,21 @@ class ClientController extends Controller
             $model->deleted_time = 0;
             $model->method_id = 0;
             $model->amount_type = $post['amount_type'];
-            if ($post['amount_type'] != 0) {
+            if ($model->amount_type == 2) {
+                $model->amount = $model->gld_weight * $model->rate_amount;
+                $w = $post['gld_weight'];
+                $model->content = "$model->content ( Приём оплаты в GLD $w гр)";
+            }
+            if ($model->amount_type == 0) {
+                $total = intval($model->amount) / intval($post['rate_amount']);
+                $model->gld_weight = $total;
+                $dec = \Yii::$app->formatter->asDecimal($model->amount, 0);
+                $model->content = "$model->content ( Приём оплаты в UZS $dec )";
 
-                if ($post['amount_type'] == 2) {
-                    $model->content = $model->content . "( Приём оплаты в GLD " . $post['gld_weight'] . ' )';
-                    $total = $post['amount'] * $post['gld_weight'];
-                    $model->amount = $total;
-                } else {
-                    $model->content = $model->content . "( Приём оплаты в USD " . $post['amount'] . ' гр)';
-                    $total = $post['amount'] * $post['rate_amount'];
-                    $model->amount = $total;
-                }
-                $curr = CurrencyRate::findOne(['status' => 0]);
-                if ($curr) {
-                    $curr->status = 1;
-                    $curr->updated = time();
-                    $curr->update(false);
-                }
-
-                $new_curr = new CurrencyRate();
-                $new_curr->created = time();
-                $new_curr->amount = $post['rate_amount'];
-                $new_curr->updated = 0;
-                $new_curr->status = 0;
-                $new_curr->save();
             }
             if ($model->save(false)) {
                 $client = Clients::findOne(['id' => $model->client_id]);
-                $client->balance += $model->amount;
+                $client->balance += $model->gld_weight;
                 $client->updated = time();
                 $client->update(false);
                 return $this->redirect(\Yii::$app->request->referrer);

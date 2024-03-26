@@ -38,7 +38,7 @@ class Clients extends \yii\db\ActiveRecord
     {
         return [
             [['fullname', 'phone', 'created', 'updated', 'client_type_id', 'token', 'address'], 'required'],
-            [['balance', 'created', 'updated', 'status', 'client_type_id', 'is_deleted', 'deleted_time', 'deleted_user_id'], 'integer'],
+            [['created', 'updated', 'status', 'client_type_id', 'is_deleted', 'deleted_time', 'deleted_user_id'], 'integer'],
             [['fullname', 'address'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 12],
             [['token'], 'string', 'max' => 6],

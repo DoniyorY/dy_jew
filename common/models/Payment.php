@@ -39,7 +39,7 @@ class Payment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created', 'amount', 'method_id', 'payment_type', 'client_id', 'content', 'token'], 'required'],
+            [['created', 'method_id', 'payment_type', 'client_id', 'content', 'token'], 'required'],
             [['created', 'amount', 'method_id', 'payment_type', 'client_id', 'is_deleted', 'deleted_user_id', 'deleted_time', 'rate_amount', 'rate_date'], 'integer'],
             [['token'], 'string', 'max' => 6],
             ['content', 'string', 'max' => 255],

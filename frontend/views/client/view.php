@@ -12,6 +12,8 @@ $this->title = $model->fullname;
 $this->params['breadcrumbs'][] = ['label' => 'Клиенты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$class = '';
+$model->balance < 0 ? $class = 'btn-danger' : $class = 'btn-success';
 ?>
 <div class="clients-view">
     <div class="row">
@@ -19,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
         <div class="col-md-4 text-center mt-2">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
+            <button type="button" class="btn <?= $class ?> w-100" data-bs-toggle="modal"
                     data-bs-target="#clientBalanceModal">
-                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 0) ?> GLD
+                <i class="bi bi-cash-stack"></i> Баланс: <?= Yii::$app->formatter->asDecimal($model->balance, 2) ?> гр
             </button>
         </div>
         <div class="col-md-4 text-end mt-2">
@@ -61,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'balance',
                                 'value' => function ($data) {
-                                    return Yii::$app->formatter->asDecimal($data->balance, 0) . ' UZS';
+                                    return Yii::$app->formatter->asDecimal($data->balance, 0) . ' GLD';
                                 }
                             ],
                             [
@@ -103,7 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-md-6">
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#createAdditionalPhone">
+                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                                    data-bs-target="#createAdditionalPhone">
                                 Добавить номер <i class="bi bi-plus-square"></i>
                             </button>
                         </div>
@@ -224,9 +227,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <tr>
                                         <td><?= $i ?></td>
                                         <td><?= $val->product->name . ' ( ' . $val->product->type->name . ' ) ' ?></td>
-                                        <td><?= Yii::$app->formatter->asDecimal($val->price, 0) ?> UZS</td>
+                                        <td><?= Yii::$app->formatter->asDecimal($val->price, 0) ?></td>
                                         <td><?= $val->weight ?> гр</td>
-                                        <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
+                                        <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?></td>
                                     </tr>
                                     <?php $i++;
                                     $weight += $val->weight;
@@ -236,7 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <th>Итого</th>
                                     <th></th>
                                     <th><?= $weight ?> гр</th>
-                                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?></th>
                                 </tr>
                                 </tbody>
 
@@ -263,7 +266,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <tr>
                                         <td><?= $i ?></td>
                                         <td><?= $val->product->name . ' ( ' . $val->product->type->name . ' ) ' ?></td>
-                                        <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?> UZS</td>
+                                        <td><?= Yii::$app->formatter->asDecimal($val->total_price, 0) ?></td>
                                     </tr>
                                     <?php $i++;
                                     $weight += $val->weight;
@@ -271,7 +274,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr class="table-dark">
                                     <th></th>
                                     <th>Итого</th>
-                                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                                    <th><?= Yii::$app->formatter->asDecimal($total, 0) ?></th>
                                 </tr>
                                 </tbody>
 
@@ -290,33 +293,38 @@ $this->params['breadcrumbs'][] = $this->title;
                     <tr class="table-warning">
                         <th>#</th>
                         <th>Дата создания</th>
-                        <th>Сумма</th>
+                        <th>Вес лома</th>
                         <th>Курс</th>
                         <th>Метод</th>
+                        <th>Сумма</th>
                         <th>Примечание</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php $i = 1;
                     $total = 0;
+                    $w = 0;
                     foreach ($payment as $item): ?>
                         <tr>
                             <td><?= $i ?></td>
                             <td><?= date('d.m.Y', $item->created) ?></td>
-                            <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
-                            <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
-                            <td><?= Yii::$app->params['payment_method'][$item->method_id] ?></td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->gld_weight, 2) ?> гр</td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?></td>
+                            <td><?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?></td>
                             <td><?= $item->content ?></td>
                         </tr>
                         <?php $i++;
+                        $w += $item->gld_weight;
                         $total += $item->amount; endforeach; ?>
 
                     <tr class="table-dark">
                         <th></th>
                         <th>Итого</th>
-                        <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                        <th><?= Yii::$app->formatter->asDecimal($w, 2) ?></th>
                         <th></th>
                         <th></th>
+                        <th><?= Yii::$app->formatter->asDecimal($total, 0) ?></th>
                         <th></th>
                     </tr>
                     </tbody>
@@ -328,7 +336,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <tr class="table-warning">
                         <th>#</th>
                         <th>Дата создания</th>
-                        <th>Сумма</th>
+                        <th>Вес лома</th>
                         <th>Курс</th>
                         <th>Примечание</th>
                     </tr>
@@ -336,21 +344,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     <tbody>
                     <?php $i = 1;
                     $total = 0;
+                    $w = 0;
                     foreach ($payment as $item): ?>
                         <tr>
                             <td><?= $i ?></td>
                             <td><?= date('d.m.Y', $item->created) ?></td>
-                            <td><?= Yii::$app->formatter->asDecimal($item->amount, 0) ?> <?= Yii::$app->params['amount_type'][$item->amount_type] ?></td>
-                            <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?> UZS</td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->gld_weight, 2) ?></td>
+                            <td><?= Yii::$app->formatter->asDecimal($item->rate_amount, 0) ?></td>
                             <td></td>
                         </tr>
                         <?php $i++;
+                        $w += $item->gld_weight;
                         $total += $item->amount; endforeach; ?>
 
                     <tr class="table-dark">
                         <th></th>
                         <th>Итого</th>
-                        <th><?= Yii::$app->formatter->asDecimal($total, 0) ?> UZS</th>
+                        <th><?= Yii::$app->formatter->asDecimal($total, 0) ?></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -377,7 +387,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="createAdditionalPhone" tabindex="-1" aria-labelledby="createAdditionalPhoneLabel" aria-hidden="true">
+<div class="modal fade" id="createAdditionalPhone" tabindex="-1" aria-labelledby="createAdditionalPhoneLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
