@@ -125,11 +125,11 @@ use common\widgets\Alert;
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['products/index']); ?>"><i
-                                    class="bi bi-chevron-right"></i> <?php echo "Товары" ?></a>
+                                    class="bi bi-chevron-right"></i> <?php echo "Изделия" ?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['gold-type/index']); ?>"><i
-                                    class="bi bi-chevron-right"></i> <?php echo "Проба" ?></a>
+                        <a class="nav-link" aria-current="page" href="<?php echo Url::to(['gold-type/index']); ?>"><i5
+                                    class="bi bi-chevron-right"></i5> <?php echo "Проба" ?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page"
