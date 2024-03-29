@@ -102,6 +102,7 @@ class ClientController extends Controller
             $model->rate_date = time();
             $model->is_deleted = 0;
             $model->deleted_user_id = 0;
+            $model->payment_type=0;
             $model->deleted_time = 0;
             $model->method_id = 0;
             $model->amount_type = $post['amount_type'];
