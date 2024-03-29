@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Sale;
+use common\models\SaleItem;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -64,7 +65,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'total_amount',
                 'value' => function ($data) {
-                    return Yii::$app->formatter->asDecimal($data->total_amount,0);
+                    $w = 0;
+                    $items = SaleItem::find()->select(['weight', 'sale_id'])->where(['sale_id' => $data->id])->all();
+                    foreach ($items as $item){
+                        $w+=$item->weight;
+                    }
+                    return Yii::$app->formatter->asDecimal($w, 2) . ' гр';
                 }
             ],
             //'content',

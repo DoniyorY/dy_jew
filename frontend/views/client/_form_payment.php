@@ -26,7 +26,7 @@ echo $form->field($model, 'client_id')->textInput(['value' => $client_id, 'hidde
         </div>
     </div>
     <div class="col-md-12 mt-2">
-        <?= $form->field($model, 'content')->textInput() ?>
+        <?= $form->field($model, 'content')->textInput(['value'=>'-']) ?>
     </div>
     <div class="col-md-12 mt-2">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success w-100']) ?>

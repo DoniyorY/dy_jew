@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if ($model->status == 1): ?>
                     <a href="<?= Url::to(['status', 'id' => $model->token, 'status' => 2]) ?>" class="btn btn-success"
                        data-method="post" data-confirm="Подтвердите действие!!!">
-                        Активный
+                        Завершить
                     </a>
                     <a href="<?= Url::to(['update', 'id' => $model->token]) ?>" class="btn btn-primary">
                         <i class="bi bi-pencil"></i> Редактировать

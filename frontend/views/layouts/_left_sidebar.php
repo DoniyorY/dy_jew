@@ -146,7 +146,7 @@ use common\widgets\Alert;
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="<?php echo Url::to(['products/index']); ?>"><i
-                                class="bi bi-chevron-right"></i> <?php echo "Товары" ?></a>
+                                class="bi bi-chevron-right"></i> <?php echo "Изделия" ?></a>
                     </li>
                     <li class="nav-item d-none">
                         <a class="nav-link" aria-current="page"

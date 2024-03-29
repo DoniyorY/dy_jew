@@ -26,7 +26,7 @@ use yii\helpers\Url;
         <?= $form->field($model, 'weight')->textInput(['type' => 'number','step'=>'any']) ?>
     </div>
     <div class="col-md-3">
-        <?= $form->field($model, 'total_price')->textInput() ?>
+        <?= $form->field($model, 'total_price')->textInput(['type'=>'number','step'=>'1']) ?>
     </div>
     <div class="col-md-2 mt-4">
         <?= Html::submitButton('Добавить', ['class' => 'btn btn-success w-100']) ?>

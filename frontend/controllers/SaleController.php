@@ -148,7 +148,7 @@ class SaleController extends Controller
         $model = $this->findModel($id);
         $model->status = $status;
         $model->updated = time();
-
+        $w_total = 0;
         //If Status Complete
         if ($status == 2) {
             $items = SaleItem::findAll(['sale_id' => $model->id]);
@@ -163,12 +163,13 @@ class SaleController extends Controller
                 $warehouse->count -= $item->count;
                 $warehouse->update(false);
                 $total += $item->total_price;
+                $w_total += $item->weight;
                 $item->status = 1;
                 $item->update(false);
             }
             $model->total_amount = $total;
             $client = Clients::findOne(['id' => $model->client_id]);
-            $client->balance -= $total;
+            $client->balance -= $w_total;
             $client->update(false);
         }
         // If Status Returned
@@ -178,9 +179,10 @@ class SaleController extends Controller
                 $warehouse = Warehouse::findOne(['product_id' => $item->product_id, 'gold_type_id' => $item->product->gold_type_id]);
                 $warehouse->count += $item->count;
                 $warehouse->update(false);
+                $w_total += $item->weight;
             }
             $client = Clients::findOne(['id' => $model->client_id]);
-            $client->balance += $model->total_amount;
+            $client->balance += $w_total;
             $client->update(false);
         }
 
